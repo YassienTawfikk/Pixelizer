@@ -69,8 +69,9 @@ class MainWindowController:
 
         # Plot the histogram
         self.popup.plot_histogram(self.path)
+        self.popup.plot_cdf(self.path)
 
-        # # Show the popup
+        # Show the popup
         dialog.exec_()
         # self.popup.show_popup()
     def apply_noise(self, type="Uniform"):
