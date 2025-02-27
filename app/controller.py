@@ -3,8 +3,8 @@ from app.utils.clean_cache import remove_directories
 from app.services.image_service import ImageServices
 from app.design.main_layout import Ui_MainWindow
 from app.processing.edge_detection import EdgeDetection
-from app.processing.histogram import ImageHistogram
 from app.processing.noise_amount import AddingNoise
+from app.design.metrics_graphs import Ui_PopWindow
 
 import cv2
 
@@ -52,8 +52,26 @@ class MainWindowController:
         self.ui.salt_pepper_noise_button.clicked.connect(lambda: self.apply_noise("Salt&Pepper"))
 
         # self.ui.show_metrics_button.clicked.connect(lambda: ImageHistogram.show_histogram_popup(self.path))
-        self.ui.show_metrics_button.clicked.connect(self.ui.popup.show_popup)
+        # self.ui.show_metrics_button.clicked.connect(self.ui.popup.show_popup)
+        # Connect the show_metrics_button to the new method
+        self.ui.show_metrics_button.clicked.connect(self.show_metrics)
 
+    def show_metrics(self):
+        """Show the histogram and metrics popup."""
+        if self.path is None:
+            print("No image loaded. Please upload an image first.")
+            return
+
+        # Initialize the popup window
+        self.popup = Ui_PopWindow()
+        dialog = QtWidgets.QDialog()
+        self.popup.setupUi(dialog)  # Initialize the UI
+
+        # Plot the histogram
+        self.popup.plot_histogram(self.path)
+
+        # Show the popup
+        self.popup.show_popup()
     def apply_noise(self, type="Uniform"):
         if self.original_image is None:
             print("No image loaded. Please upload an image first.")

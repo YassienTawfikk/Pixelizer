@@ -1,3 +1,5 @@
+import cv2
+import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from app.design.tools.gui_utilities import GUIUtilities
 
@@ -50,12 +52,14 @@ class Ui_PopWindow:
         )
         self.layout.addWidget(self.histogram_groupBox)
 
+
         self.distribution_groupBox, self.distribution_plot_widget = self.util.createGroupBox(
             "Distribution Curve",
             QtCore.QSize(int(width * 0.95), int(height * 0.4)),
             group_box_style,
             isGraph=True
         )
+
         self.layout.addWidget(self.distribution_groupBox)
 
         self.close_button = self.util.createButton("Close", self.button_style)
@@ -67,6 +71,30 @@ class Ui_PopWindow:
         self.buttonLayout.addStretch(1)
         self.layout.addLayout(self.buttonLayout)
 
+    def plot_histogram(self, image_path):
+        """Plot the histogram of the image."""
+        if not image_path:
+            print("Error: No image path provided.")
+            return
+
+        # Load the image in grayscale
+        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        if image is None:
+            print("Error: Unable to load image.")
+            return
+
+        # Calculate the histogram manually using NumPy
+        hist, bin_edges = np.histogram(image, bins=256, range=(0, 256))
+        print("plot the histo")
+
+        # Plot the histogram using the histogram_plot_widget
+        self.histogram_plot_widget.clear()  # Clear any previous plots
+        self.histogram_plot_widget.plot(bin_edges[:-1], hist, pen='blue')  # Plot the histogram
+
+        # Set labels and title
+        self.histogram_plot_widget.setLabel('left', 'Pixel Count')
+        self.histogram_plot_widget.setLabel('bottom', 'Pixel Intensity')
+        self.histogram_plot_widget.setTitle('Histogram of Grayscale Image')
     def show_popup(self):
         """ Method to show the pop-up window as a modal dialog. """
         self.Dialog = QtWidgets.QDialog()
