@@ -52,14 +52,12 @@ class Ui_PopWindow:
         )
         self.layout.addWidget(self.histogram_groupBox)
 
-
         self.distribution_groupBox, self.distribution_plot_widget = self.util.createGroupBox(
             "Distribution Curve",
             QtCore.QSize(int(width * 0.95), int(height * 0.4)),
             group_box_style,
             isGraph=True
         )
-
         self.layout.addWidget(self.distribution_groupBox)
 
         self.close_button = self.util.createButton("Close", self.button_style)
@@ -85,16 +83,27 @@ class Ui_PopWindow:
 
         # Calculate the histogram manually using NumPy
         hist, bin_edges = np.histogram(image, bins=256, range=(0, 256))
-        print("plot the histo")
+        print("Plotting histogram...")
 
-        # Plot the histogram using the histogram_plot_widget
-        self.histogram_plot_widget.clear()  # Clear any previous plots
-        self.histogram_plot_widget.plot(bin_edges[:-1], hist, pen='blue')  # Plot the histogram
+        # Ensure histogram_plot_widget is properly initialized
+        if not hasattr(self, 'histogram_plot_widget') or self.histogram_plot_widget is None:
+            print("Error: histogram_plot_widget is not initialized.")
+            return
 
-        # Set labels and title
-        self.histogram_plot_widget.setLabel('left', 'Pixel Count')
-        self.histogram_plot_widget.setLabel('bottom', 'Pixel Intensity')
-        self.histogram_plot_widget.setTitle('Histogram of Grayscale Image')
+        # Clear previous plot
+        self.histogram_plot_widget.ax.clear()
+
+        # Plot histogram
+        self.histogram_plot_widget.ax.bar(bin_edges[:-1], hist, width=1, color='blue', edgecolor='black', linewidth=0.5)
+
+        # Set axis labels and title
+        self.histogram_plot_widget.ax.set_xlabel("Pixel Intensity")
+        self.histogram_plot_widget.ax.set_ylabel("Pixel Count")
+        self.histogram_plot_widget.ax.set_title("Histogram of Grayscale Image")
+
+        # Force the canvas to update
+        self.histogram_plot_widget.draw()
+
     def show_popup(self):
         """ Method to show the pop-up window as a modal dialog. """
         self.Dialog = QtWidgets.QDialog()

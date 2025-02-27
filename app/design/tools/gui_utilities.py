@@ -1,7 +1,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pyqtgraph as pg
+from PyQt5 import QtWidgets
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
+class MatplotlibCanvas(FigureCanvas):
+    def __init__(self, parent=None):
+        self.fig, self.ax = Figure(figsize=(5, 4), dpi=100), None
+        self.ax = self.fig.add_subplot(111)  # Single subplot
+        super().__init__(self.fig)
 class GUIUtilities:
     def __init__(self):
         pass  # Initialize any instance variables if necessary
@@ -63,12 +71,15 @@ class GUIUtilities:
         return groupBox, widget
 
     def addGraphView(self, group_box):
-        plot_widget = pg.PlotWidget()
-        plot_widget.showGrid(x=True, y=True, alpha=0.3)
+        """ Replaces pyqtgraph with Matplotlib """
+        plot_widget = MatplotlibCanvas()  # Create the Matplotlib canvas
+        # toolbar = NavigationToolbar(plot_widget, group_box)  # Add navigation toolbar
 
         graph_layout = QtWidgets.QVBoxLayout()
+        # graph_layout.addWidget(toolbar)  # Toolbar for zoom/pan
         graph_layout.addWidget(plot_widget)
         graph_layout.setContentsMargins(5, 25, 5, 5)
+
         group_box.setLayout(graph_layout)
         return plot_widget
 
