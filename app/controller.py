@@ -30,6 +30,12 @@ class MainWindowController:
 
         self.edge = EdgeDetection()
         self.noise = AddingNoise()
+        self.denoise = Denoise()
+
+        self.equalize = EqualizeHistogram()
+        self.normalize = ImageNormalization()
+        self.threshold = Thresholding()
+        self.convert = RGBImageConverter()
 
         # Connect signals to slots
         self.setupConnections()
@@ -56,9 +62,9 @@ class MainWindowController:
         self.ui.gaussian_noise_button.clicked.connect(lambda: self.apply_noise("Gaussian"))
         self.ui.salt_pepper_noise_button.clicked.connect(lambda: self.apply_noise("Salt&Pepper"))
 
-        self.ui.average_filter_button.clicked.connect(lambda: self.remove_noise("Average"))
-        self.ui.gaussian_filter_apply_button.clicked.connect(lambda: self.remove_noise("Gaussian"))
-        self.ui.median_filter_button.clicked.connect(lambda: self.remove_noise("Median"))
+        self.ui.average_filter_button.clicked.connect(lambda: self.apply_noise("Average"))
+        self.ui.gaussian_filter_apply_button.clicked.connect(lambda: self.apply_noise("Gaussian"))
+        self.ui.median_filter_button.clicked.connect(lambda: self.apply_noise("Median"))
 
         # self.ui.show_metrics_button.clicked.connect(lambda: ImageHistogram.show_histogram_popup(self.path))
         # self.ui.show_metrics_button.clicked.connect(self.ui.popup.show_popup)
@@ -87,14 +93,15 @@ class MainWindowController:
         # Show the popup
         dialog.exec_()
         # self.popup.show_popup()
+
     def apply_noise(self, type="Uniform"):
         if self.original_image is None:
             print("No image loaded. Please upload an image first.")
-            return  # Prevents crashing
+            return  
 
         if type == "Uniform":
             amount = self.ui.uniform_noise_slider.value() / 100
-            print(amount)
+            # print(amount)
             self.processed_image = self.noise.add_uniform_noise(self.original_image, amount)
         elif type == "Gaussian":
             mean = self.ui.mean_gaussian_noise_slider.value()
@@ -106,14 +113,13 @@ class MainWindowController:
 
         self.showProcessed()
 
-    def remove_noise(self, type="Average"):
+    def apply_noise(self, type="Average"):
         if self.original_image is None:
             print("No image loaded. Please upload an image first.")
-            return  # Prevents crashing
+            return 
         
-        # kernel_size=self.ui.filter_kernal_size_button.value()
         kernel_size=5
-        sigma=self.ui.gaussian_filter_sigma_spinbox.value()
+        sigma= self.ui.gaussian_filter_sigma_spinbox.value()
 
         if type == "Average":
             self.processed_image = self.denoise.apply_average_filter(self.processed_image, kernel_size)
@@ -123,7 +129,6 @@ class MainWindowController:
             self.processed_image = self.denoise.apply_median_filter(self.processed_image, kernel_size)
 
         self.showProcessed()
-
 
     def edge_detection(self, type="Sobel"):
         if self.original_image is None:

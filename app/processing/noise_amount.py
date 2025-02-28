@@ -4,8 +4,8 @@ import numpy as np
 class AddingNoise:
 
     @staticmethod
-    def add_uniform_noise(image, noise_amount=0.5):  # noise_amount is from slider (0 to 1)
-        high = int(noise_amount * 100)  # Scale slider value to range (0-100)
+    def add_uniform_noise(image, noise_amount=0.5):  
+        high = int(noise_amount * 100)  
         noise = np.random.uniform(-high, high, image.shape).astype(np.int16)
         noisy_image = cv2.add(image.astype(np.int16), noise)
         return cv2.convertScaleAbs(noisy_image)
