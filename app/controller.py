@@ -105,7 +105,7 @@ class MainWindowController:
     def apply_noise(self, type="Uniform"):
         if self.original_image is None:
             print("No image loaded. Please upload an image first.")
-            return  
+            return
 
         if type == "Uniform":
             amount = self.ui.uniform_noise_slider.value() / 100
@@ -123,17 +123,16 @@ class MainWindowController:
     def remove_noise(self, type="Average"):
         if self.original_image is None:
             print("No image loaded. Please upload an image first.")
-            return 
-        
-        kernel_size=5
-        sigma= self.ui.gaussian_filter_sigma_spinbox.value()
+            return
+
+        sigma = self.ui.gaussian_filter_sigma_spinbox.value()
 
         if type == "Average":
-            self.processed_image = self.denoise.apply_average_filter(self.processed_image, kernel_size)
+            self.processed_image = self.denoise.apply_average_filter(self.processed_image, self.ui.current_kernal_size)
         elif type == "Gaussian":
-            self.processed_image = self.denoise.apply_gaussian_filter(self.processed_image, kernel_size, sigma)
+            self.processed_image = self.denoise.apply_gaussian_filter(self.processed_image, self.ui.current_kernal_size, sigma)
         elif type == "Median":
-            self.processed_image = self.denoise.apply_median_filter(self.processed_image, kernel_size)
+            self.processed_image = self.denoise.apply_median_filter(self.processed_image, self.ui.current_kernal_size)
 
         self.showProcessed()
 
@@ -161,14 +160,14 @@ class MainWindowController:
     def apply_fourier_filters(self, type="High"):
         if self.original_image is None:
             print("No image loaded. Please upload an image first.")
-            return  
+            return
 
-        radius=self.ui.raduis_control_slider.value()
+        radius = self.ui.raduis_control_slider.value()
 
-        if type=="High":
-            self.processed_image=self.fft_filter.apply_high_pass(self.original_image,radius)
-        elif type=="Low":
-            self.processed_image=self.fft_filter.apply_low_pass(self.original_image,radius)
+        if type == "High":
+            self.processed_image = self.fft_filter.apply_high_pass(self.original_image, radius)
+        elif type == "Low":
+            self.processed_image = self.fft_filter.apply_low_pass(self.original_image, radius)
 
         print("processed image exists")
         self.showProcessed()
@@ -206,8 +205,9 @@ class MainWindowController:
 
         self.srv.clear_image(self.ui.processed_groupBox)
         self.srv.set_image_in_groupbox(self.ui.processed_groupBox, self.processed_image)
+
     def gray_image_converter(self):
-        image= self.convert.rgb_to_gray(self.original_image)
+        image = self.convert.rgb_to_gray(self.original_image)
         # Update processed image with the equalized image
         self.processed_image = image
 
@@ -219,8 +219,8 @@ class MainWindowController:
         """Apply normalization to the original image."""
         # Convert to grayscale if the image is in color
         if len(self.original_image.shape) == 3:
-            #gray_image = self.convert.rgb_to_gray(self.original_image)
-            img_normalized =self.normalize.normalize_image_rgb(self.original_image)
+            # gray_image = self.convert.rgb_to_gray(self.original_image)
+            img_normalized = self.normalize.normalize_image_rgb(self.original_image)
         else:
             gray_image = self.original_image
             img_normalized = self.normalize.normalize_image(gray_image)
@@ -239,7 +239,7 @@ class MainWindowController:
 
         # Convert to grayscale if the image is in color
         if len(self.original_image.shape) == 3:
-            #gray_image = self.convert.rgb_to_gray(self.original_image)
+            # gray_image = self.convert.rgb_to_gray(self.original_image)
             equalized_image = self.equalize.equalizeHistRGB(self.original_image)
         else:
             gray_image = self.original_image
