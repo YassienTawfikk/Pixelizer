@@ -7,6 +7,10 @@ from app.processing.noise_amount import AddingNoise
 from app.design.metrics_graphs import Ui_PopWindow
 
 import cv2
+from app.processing.histogram_equalization import EqualizeHistogram
+from app.processing.image_normalization import ImageNormalization
+from app.processing.thresholding import Thresholding
+from app.processing.RGB_image_converter import RGBImageConverter
 
 
 class MainWindowController:
@@ -25,6 +29,11 @@ class MainWindowController:
 
         self.edge = EdgeDetection()
         self.noise = AddingNoise()
+
+        self.equalize = EqualizeHistogram()
+        self.normalize = ImageNormalization()
+        self.threshold = Thresholding()
+        self.convert = RGBImageConverter()
 
         # Connect signals to slots
         self.setupConnections()
@@ -55,6 +64,10 @@ class MainWindowController:
         # self.ui.show_metrics_button.clicked.connect(self.ui.popup.show_popup)
         # Connect the show_metrics_button to the new method
         self.ui.show_metrics_button.clicked.connect(self.show_metrics)
+
+        self.ui.equalize_image_button.clicked.connect(self.equalize_image)
+        self.ui.normalize_image_button.clicked.connect(self.normalize_image)
+        self.ui.grayscaling_button.clicked.connect(self.gray_image_converter)
 
     def show_metrics(self):
         """Show the histogram and metrics popup."""
@@ -137,6 +150,94 @@ class MainWindowController:
 
         self.srv.clear_image(self.ui.processed_groupBox)
         self.srv.set_image_in_groupbox(self.ui.processed_groupBox, self.processed_image)
+    def gray_image_converter(self):
+        image= self.convert.rgb_to_gray(self.original_image)
+        # Update processed image with the equalized image
+        self.processed_image = image
+
+        # Show the processed image
+        self.showProcessed()
+        return self.convert.rgb_to_gray(self.original_image)
+
+    def normalize_image(self):
+        """Apply normalization to the original image."""
+        # Convert to grayscale if the image is in color
+        if len(self.original_image.shape) == 3:
+            gray_image = self.convert.rgb_to_gray(self.original_image)
+        else:
+            gray_image = self.original_image
+
+        img_normalized = self.normalize.normalize_image(gray_image)
+        # Update processed image with the equalized image
+        self.processed_image = img_normalized
+
+        # Show the processed image
+        self.showProcessed()
+
+    def equalize_image(self):
+        """Apply histogram equalization to the original image."""
+        if self.original_image is None:
+            print("No processed image available for equalization.")
+            return
+
+        # Convert to grayscale if the image is in color
+        if len(self.original_image.shape) == 3:
+            gray_image = self.convert.rgb_to_gray(self.original_image)
+        else:
+            gray_image = self.original_image
+
+        # Apply histogram equalization
+        equalized_image = self.equalize.equalizeHist(gray_image)
+
+        # Update processed image with the equalized image
+        self.processed_image = equalized_image
+
+        # Show the processed image
+        self.showProcessed()
+
+    def global_thresholding(self):
+        """Apply global thresholding to the original image."""
+        if self.original_image is None:
+            print("No processed image available for equalization.")
+            return
+
+        # Convert to grayscale if the image is in color
+        if len(self.original_image.shape) == 3:
+            gray_image = self.convert.rgb_to_gray(self.original_image)
+        else:
+            gray_image = self.original_image
+
+        threshold_value = 127
+        binary_global = self.threshold.global_threshold(gray_image, threshold_value)
+
+        # Update processed image with the equalized image
+        self.processed_image = binary_global
+
+        # Show the processed image
+        self.showProcessed()
+
+    def local_thresholding(self):
+        """Apply local thresholding to the original image."""
+        if self.original_image is None:
+            print("No processed image available for equalization.")
+            return
+
+        # Convert to grayscale if the image is in color
+        if len(self.original_image.shape) == 3:
+            gray_image = self.convert.rgb_to_gray(self.original_image)
+        else:
+            gray_image = self.original_image
+
+        # Apply custom local thresholding
+        block_size = 11  # Size of the neighborhood
+        C = 2  # Constant subtracted from the mean
+        binary_local = self.threshold.local_threshold(gray_image, block_size, C)
+
+        # Update processed image with the equalized image
+        self.processed_image = binary_local
+
+        # Show the processed image
+        self.showProcessed()
 
     def closeApp(self):
         """Close the application."""
