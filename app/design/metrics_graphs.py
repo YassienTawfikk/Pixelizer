@@ -69,9 +69,6 @@ class Ui_PopWindow:
         self.buttonLayout.addStretch(1)
         self.layout.addLayout(self.buttonLayout)
 
-    import cv2
-    import numpy as np
-
     def process_image(self,image_path):
         """Loads a grayscale image and computes its histogram."""
         if not image_path:
