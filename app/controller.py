@@ -6,6 +6,7 @@ from app.processing.edge_detection import EdgeDetection
 from app.processing.noise_amount import AddingNoise
 from app.design.metrics_graphs import Ui_PopWindow
 from app.processing.denoise import Denoise
+from app.processing.fourier_filers import FourierFilters
 
 import cv2
 from app.processing.histogram_equalization import EqualizeHistogram
@@ -31,6 +32,7 @@ class MainWindowController:
         self.edge = EdgeDetection()
         self.noise = AddingNoise()
         self.denoise = Denoise()
+        self.fft_filter = FourierFilters()
 
         self.equalize = EqualizeHistogram()
         self.normalize = ImageNormalization()
@@ -65,6 +67,9 @@ class MainWindowController:
         self.ui.average_filter_button.clicked.connect(lambda: self.apply_noise("Average"))
         self.ui.gaussian_filter_apply_button.clicked.connect(lambda: self.apply_noise("Gaussian"))
         self.ui.median_filter_button.clicked.connect(lambda: self.apply_noise("Median"))
+
+        self.ui.pass_filter_button.clicked.connect(self.apply_fourier_filters)
+        # self.ui.pass_filter_button.clicked.connect(lambda: self.apply_fourier_filters("Low"))
 
         # self.ui.show_metrics_button.clicked.connect(lambda: ImageHistogram.show_histogram_popup(self.path))
         # self.ui.show_metrics_button.clicked.connect(self.ui.popup.show_popup)
@@ -148,6 +153,21 @@ class MainWindowController:
             low = self.ui.edge_detection_low_threshold_spinbox.value()
             high = self.ui.edge_detection_high_threshold_spinbox.value()
             self.processed_image = self.edge.apply_canny(self.original_image, low, high)
+
+        self.showProcessed()
+
+    def apply_fourier_filters(self):
+        if self.original_image is None:
+            print("No image loaded. Please upload an image first.")
+            return  
+
+        radius=self.ui.raduis_control_slider.value()
+        self.processed_image=self.fft_filter.apply_high_pass(self.original_image,radius)
+
+        # if type=="High":
+        #     self.processed_image=self.fft_filter.apply_high_pass(self.original_image,radius)
+        # elif type=="Low":
+        #     self.processed_image=self.fft_filter.apply_low_pass(self.original_image,radius)
 
         self.showProcessed()
 
