@@ -49,6 +49,9 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        self.original_groupBox.show()
+        self.processed_groupBox.show()
+
         # 7) Set window title, etc.
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -261,6 +264,13 @@ class Ui_MainWindow(object):
         self.setupThresholdWidgets()
         self.sidebar_stacked.addWidget(self.page_threshold_controls)
 
+        # PAGE 7: Hybrid Image Controls
+        self.page_hybrid_image_controls = QtWidgets.QWidget()
+        self.page_hybrid_image_layout = QtWidgets.QVBoxLayout(self.page_hybrid_image_controls)
+        self.page_hybrid_image_layout.setSpacing(10)
+        self.setupHybridImageWidgets()
+        self.sidebar_stacked.addWidget(self.page_hybrid_image_controls)
+
         # By default, show page 0
         self.sidebar_stacked.setCurrentIndex(0)
 
@@ -279,7 +289,7 @@ class Ui_MainWindow(object):
         self.show_threshold_options_button = self.util.createButton("Thresholding", self.button_style, self.show_threshold_controls)
         self.grayscaling_button = self.util.createButton("Gray Scaling", self.button_style)
         self.show_fourier_filter_options_button = self.util.createButton("Fourier Filters", self.button_style, self.show_fourier_filter_controls)
-        self.upload_hybrid_image_button = self.util.createButton("Hybrid Image", self.button_style)
+        self.upload_hybrid_image_button = self.util.createButton("Hybrid Image", self.button_style, self.show_hybrid_image_controls)
 
         # We'll store these main buttons in a list if you need to show/hide them
         self.MAIN_BUTTONS = [
@@ -577,6 +587,75 @@ class Ui_MainWindow(object):
             style=self.groupbox_style,
             isGraph=False
         )
+    '''def setupHybridImages(self):
+        """Creates two group boxes: Original Image & Processed Image."""
+        self.low_frequency_groupbox, _ = self.util.createGroupBox(
+            title="Low Frequency Image",
+            size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
+                              int(self.screen_size.height() * (526 / 800))),
+            style=self.groupbox_style,
+            isGraph=False
+        )
+        self.high_frequency_groupbox, _ = self.util.createGroupBox(
+            title="High Frequency Image",
+            size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
+                              int(self.screen_size.height() * (526 / 800))),
+            style=self.groupbox_style,
+            isGraph=False
+        )
+        self.hybrid_image_groupbox, _ = self.util.createGroupBox(
+            title="High Frequency Image",
+            size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
+                              int(self.screen_size.height() * (526 / 800))),
+            style=self.groupbox_style,
+            isGraph=False
+        )'''
+
+    def setupHybridImageWidgets(self):
+        """
+        Sets up the layout for the hybrid image page but does not create the widgets yet.
+        """
+        # Back button to return to the main buttons
+        self.back_button = self.util.createButton("Back", self.button_style, self.show_main_buttons)
+        self.page_hybrid_image_layout.addWidget(self.back_button)
+
+        # Placeholder for the group boxes (they will be created dynamically)
+        self.low_frequency_groupbox = None
+        self.high_frequency_groupbox = None
+        self.hybrid_image_groupbox = None
+
+    def addHybridImageWidgets(self):
+        """
+        Dynamically creates and adds the group boxes for low-frequency, high-frequency, and hybrid images.
+        """
+        if self.low_frequency_groupbox is None:  # Check if widgets are already created
+            # Create the group boxes
+            self.low_frequency_groupbox, _ = self.util.createGroupBox(
+                title="Low Frequency Image",
+                size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
+                                  int(self.screen_size.height() * (526 / 800))),
+                style=self.groupbox_style,
+                isGraph=False
+            )
+            self.high_frequency_groupbox, _ = self.util.createGroupBox(
+                title="High Frequency Image",
+                size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
+                                  int(self.screen_size.height() * (526 / 800))),
+                style=self.groupbox_style,
+                isGraph=False
+            )
+            self.hybrid_image_groupbox, _ = self.util.createGroupBox(
+                title="Hybrid Image",
+                size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
+                                  int(self.screen_size.height() * (526 / 800))),
+                style=self.groupbox_style,
+                isGraph=False
+            )
+
+            # Add the group boxes to the layout
+            self.page_hybrid_image_layout.addWidget(self.low_frequency_groupbox)
+            self.page_hybrid_image_layout.addWidget(self.high_frequency_groupbox)
+            self.page_hybrid_image_layout.addWidget(self.hybrid_image_groupbox)
 
     def update_high_threshold(self, low_threshold_value):
         """
@@ -607,8 +686,24 @@ class Ui_MainWindow(object):
     #  Show/Hide Logic
     # ----------------------------------------------------------------------
     def show_main_buttons(self):
-        """Switch QStackedWidget to page 0 (main buttons)."""
-        self.sidebar_stacked.setCurrentIndex(0)
+        """
+        Switches back to the main buttons page, shows the original and processed group boxes,
+        and hides the hybrid image group boxes.
+        """
+        # Show the original and processed group boxes
+        self.original_groupBox.show()
+        self.processed_groupBox.show()
+
+        # Hide the hybrid image group boxes
+        if self.low_frequency_groupbox is not None:
+            self.low_frequency_groupbox.hide()
+        if self.high_frequency_groupbox is not None:
+            self.high_frequency_groupbox.hide()
+        if self.hybrid_image_groupbox is not None:
+            self.hybrid_image_groupbox.hide()
+
+        # Switch to the main buttons page
+        self.sidebar_stacked.setCurrentIndex(0)  # Assuming main buttons page is at index 0
 
     def show_noise_controls(self):
         """Switch QStackedWidget to page 1 (noise controls)."""
@@ -630,3 +725,26 @@ class Ui_MainWindow(object):
 
     def show_threshold_controls(self):
         self.sidebar_stacked.setCurrentIndex(6)
+
+    def show_hybrid_image_controls(self):
+        """
+        Switches to the hybrid image page, hides the original and processed group boxes,
+        and dynamically adds the hybrid image widgets if they don't already exist.
+        """
+        # Hide the original and processed group boxes
+        self.original_groupBox.hide()
+        self.processed_groupBox.hide()
+
+        # Switch to the hybrid image page
+        self.sidebar_stacked.setCurrentIndex(7)  # Assuming hybrid image page is at index 7
+
+        # Dynamically add the hybrid image widgets if they don't already exist
+        self.addHybridImageWidgets()
+
+        # Ensure the hybrid image group boxes are visible
+        if self.low_frequency_groupbox is not None:
+            self.low_frequency_groupbox.show()
+        if self.high_frequency_groupbox is not None:
+            self.high_frequency_groupbox.show()
+        if self.hybrid_image_groupbox is not None:
+            self.hybrid_image_groupbox.show()
