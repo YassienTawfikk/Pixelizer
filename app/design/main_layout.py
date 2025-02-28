@@ -287,7 +287,8 @@ class Ui_MainWindow(object):
             self.show_fourier_filter_options_button,
             self.upload_hybrid_image_button
         ]
-        self.kernal_sizes_array = ["3×3", "4×4", "5×5"]
+        self.kernel_sizes_array = [3, 5, 7]
+        self.current_kernal_size = 3
 
     def setupNoiseWidgets(self):
         """
@@ -321,7 +322,7 @@ class Ui_MainWindow(object):
 
         (self.mean_gaussian_noise_slider,
          mean_slider_label,
-         mean_slider_layout) = self.util.createSlider(min_value=-5, max_value=5, initial_value=0, style=self.slider_style, isVisible=True)
+         mean_slider_layout) = self.util.createSlider(min_value=-10, max_value=10, initial_value=0, style=self.slider_style, isVisible=True)
         self.page_noise_layout.addLayout(mean_slider_layout)
 
         # This second label was "Mean" in your original code
@@ -330,7 +331,7 @@ class Ui_MainWindow(object):
 
         (self.stddev_gaussian_noise_slider,
          stddev_val_label,
-         stddev_layout) = self.util.createSlider(min_value=0, max_value=10, initial_value=5, style=self.slider_style, isVisible=True)
+         stddev_layout) = self.util.createSlider(min_value=0, max_value=20, initial_value=5, style=self.slider_style, isVisible=True)
         self.page_noise_layout.addLayout(stddev_layout)
 
         self.gaussian_noise_button = self.util.createButton("Apply", self.button_style)
@@ -360,8 +361,8 @@ class Ui_MainWindow(object):
 
         kernal_size_label = self.util.createLabel("Kernal Size", isHead=True)
         self.page_filter_layout.addWidget(kernal_size_label)
-        self.filter_kernal_size_button = self.util.createButton(self.kernal_sizes_array[0], self.button_style, lambda: self.toggle_kernal_size(self.filter_kernal_size_button))
-        self.page_filter_layout.addWidget(self.filter_kernal_size_button)
+        self.filter_kernel_size_button = self.util.createButton(f"{self.current_kernal_size}×{self.current_kernal_size}", self.button_style, lambda: self.toggle_kernel_size(self.filter_kernel_size_button))
+        self.page_filter_layout.addWidget(self.filter_kernel_size_button)
 
         average_filter_title = self.util.createLabel("Average Filter", "color:white;", isVisible=True, isHead=True)
         self.page_filter_layout.addWidget(average_filter_title)
@@ -468,10 +469,16 @@ class Ui_MainWindow(object):
         self.page_fourier_filter_layout.addWidget(back_button)
 
         # =========================================================================================================
-        pass_filter_label = self.util.createLabel("Current Pass Filter", isHead=True)
-        self.page_fourier_filter_layout.addWidget(pass_filter_label)
-        self.pass_filter_button = self.util.createButton("High Pass Filter", self.button_style, self.toggle_pass_filter)
-        self.page_fourier_filter_layout.addWidget(self.pass_filter_button)
+        hpf_label = self.util.createLabel("High Pass Filter", isHead=True)
+        self.page_fourier_filter_layout.addWidget(hpf_label)
+        self.hpf_button = self.util.createButton("Apply", self.button_style)
+        self.page_fourier_filter_layout.addWidget(self.hpf_button)
+
+        # =========================================================================================================
+        lpf_label = self.util.createLabel("Low Pass Filter", isHead=True)
+        self.page_fourier_filter_layout.addWidget(lpf_label)
+        self.lpf_button = self.util.createButton("Apply", self.button_style)
+        self.page_fourier_filter_layout.addWidget(self.lpf_button)
 
         # =========================================================================================================
         raduis_control_title = self.util.createLabel("Raduis Control", isHead=True)
@@ -481,32 +488,29 @@ class Ui_MainWindow(object):
          raduis_control_layout) = self.util.createSlider(0, 100, 50, "%", self.slider_style, )
         self.page_fourier_filter_layout.addLayout(raduis_control_layout)
 
-        label01 = self.util.createLabel("", isHead=True)
-        self.page_fourier_filter_layout.addWidget(label01)
+        # label01 = self.util.createLabel("", isHead=True)
+        # self.page_fourier_filter_layout.addWidget(label01)
         label02 = self.util.createLabel("", isHead=True)
         self.page_fourier_filter_layout.addWidget(label02)
         label03 = self.util.createLabel("", isHead=True)
         self.page_fourier_filter_layout.addWidget(label03)
 
-    def toggle_kernal_size(self, kernal_button):
+    def toggle_kernel_size(self, kernal_button):
         """
-        Cycles through predefined kernel sizes and updates the button text to reflect the current selection.
+        Cycles through predefined kernal sizes and updates the button text to reflect the current selection.
         """
-        # Get the current text of the button
-        current_text = kernal_button.text()
+        # Get the current size from the button text
+        current_size = int(kernal_button.text().split('×')[0])
 
-        # Find the index of the current text in the kernel sizes array
-        current_index = self.kernal_sizes_array.index(current_text)
+        # Find the index of the current size in the kernal sizes array
+        current_index = self.kernel_sizes_array.index(current_size)
 
         # Compute the next index; wrap around to the beginning if necessary
-        next_index = (current_index + 1) % len(self.kernal_sizes_array)
+        next_index = (current_index + 1) % len(self.kernel_sizes_array)
+        self.current_kernal_size = self.kernel_sizes_array[next_index]
 
-        # Update the button text to the next kernel size
-        kernal_button.setText(self.kernal_sizes_array[next_index])
-
-    def toggle_pass_filter(self):
-        text = "Low Pass Filter" if self.pass_filter_button.text() == "High Pass Filter" else "High Pass Filter"
-        self.pass_filter_button.setText(text)
+        # Update the button text to the next kernal size
+        kernal_button.setText(f"{self.current_kernal_size}×{self.current_kernal_size}")
 
     def setupImageGroupBoxes(self):
         """Creates two group boxes: Original Image & Processed Image."""

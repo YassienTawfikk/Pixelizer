@@ -12,7 +12,7 @@ import cv2
 from app.processing.histogram_equalization import EqualizeHistogram
 from app.processing.image_normalization import ImageNormalization
 from app.processing.thresholding import Thresholding
-from app.processing.RGB_image_converter import RGBImageConverter
+from app.processing.rgb_image_converter import RGBImageConverter
 
 
 class MainWindowController:
@@ -68,8 +68,8 @@ class MainWindowController:
         self.ui.gaussian_filter_apply_button.clicked.connect(lambda: self.apply_noise("Gaussian"))
         self.ui.median_filter_button.clicked.connect(lambda: self.apply_noise("Median"))
 
-        self.ui.pass_filter_button.clicked.connect(self.apply_fourier_filters)
-        # self.ui.pass_filter_button.clicked.connect(lambda: self.apply_fourier_filters("Low"))
+        self.ui.hpf_button.clicked.connect(self.apply_fourier_filters)
+        # self.ui.hpf_button.clicked.connect(lambda: self.apply_fourier_filters("Low"))
 
         # self.ui.show_metrics_button.clicked.connect(lambda: ImageHistogram.show_histogram_popup(self.path))
         # self.ui.show_metrics_button.clicked.connect(self.ui.popup.show_popup)

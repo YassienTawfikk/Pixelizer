@@ -1,4 +1,6 @@
 import numpy as np
+
+
 class RGBImageConverter:
     @staticmethod
     def rgb_to_gray(image):
