@@ -22,7 +22,7 @@ class MainWindowController:
 
         self.path = None
         self.original_image = None
-        self.processed_image = None
+        self.processed_image = self.original_image
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.MainWindow)
@@ -64,12 +64,15 @@ class MainWindowController:
         self.ui.gaussian_noise_button.clicked.connect(lambda: self.apply_noise("Gaussian"))
         self.ui.salt_pepper_noise_button.clicked.connect(lambda: self.apply_noise("Salt&Pepper"))
 
-        self.ui.average_filter_button.clicked.connect(lambda: self.apply_noise("Average"))
-        self.ui.gaussian_filter_apply_button.clicked.connect(lambda: self.apply_noise("Gaussian"))
-        self.ui.median_filter_button.clicked.connect(lambda: self.apply_noise("Median"))
+        self.ui.average_filter_button.clicked.connect(lambda: self.remove_noise("Average"))
+        self.ui.gaussian_filter_apply_button.clicked.connect(lambda: self.remove_noise("Gaussian"))
+        self.ui.median_filter_button.clicked.connect(lambda: self.remove_noise("Median"))
 
-        self.ui.hpf_button.clicked.connect(self.apply_fourier_filters)
-        # self.ui.hpf_button.clicked.connect(lambda: self.apply_fourier_filters("Low"))
+        self.ui.hpf_button.clicked.connect(lambda: self.apply_fourier_filters("High"))
+        self.ui.lpf_button.clicked.connect(lambda: self.apply_fourier_filters("Low"))
+
+        # self.ui.hpf_button.clicked.connect(self.apply_fourier_filters)
+        # self.ui.lpf_button.clicked.connect(self.apply_fourier_filters)
 
         # self.ui.show_metrics_button.clicked.connect(lambda: ImageHistogram.show_histogram_popup(self.path))
         # self.ui.show_metrics_button.clicked.connect(self.ui.popup.show_popup)
@@ -106,7 +109,6 @@ class MainWindowController:
 
         if type == "Uniform":
             amount = self.ui.uniform_noise_slider.value() / 100
-            # print(amount)
             self.processed_image = self.noise.add_uniform_noise(self.original_image, amount)
         elif type == "Gaussian":
             mean = self.ui.mean_gaussian_noise_slider.value()
@@ -118,7 +120,7 @@ class MainWindowController:
 
         self.showProcessed()
 
-    def apply_noise(self, type="Average"):
+    def remove_noise(self, type="Average"):
         if self.original_image is None:
             print("No image loaded. Please upload an image first.")
             return 
@@ -156,20 +158,30 @@ class MainWindowController:
 
         self.showProcessed()
 
-    def apply_fourier_filters(self):
+    def apply_fourier_filters(self, type="High"):
         if self.original_image is None:
             print("No image loaded. Please upload an image first.")
             return  
 
         radius=self.ui.raduis_control_slider.value()
-        self.processed_image=self.fft_filter.apply_high_pass(self.original_image,radius)
 
-        # if type=="High":
-        #     self.processed_image=self.fft_filter.apply_high_pass(self.original_image,radius)
-        # elif type=="Low":
-        #     self.processed_image=self.fft_filter.apply_low_pass(self.original_image,radius)
+        if type=="High":
+            self.processed_image=self.fft_filter.apply_high_pass(self.original_image,radius)
+        elif type=="Low":
+            self.processed_image=self.fft_filter.apply_low_pass(self.original_image,radius)
 
+        print("processed image exists")
         self.showProcessed()
+
+    # def apply_fourier_filters(self):
+    #     if self.original_image is None:
+    #         print("No image loaded. Please upload an image first.")
+    #         return  
+
+    #     radius=self.ui.raduis_control_slider.value()
+    #     self.processed_image=self.fft_filter.apply_low_pass(self.original_image,radius)
+
+    #     self.showProcessed()
 
     def drawImage(self):
         self.path = self.srv.upload_image_file()
