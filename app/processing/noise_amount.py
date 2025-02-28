@@ -12,16 +12,13 @@ class AddingNoise:
 
     @staticmethod
     def add_gaussian_noise(image, mean=0.0, sigma=0.5):  
-        # mean = int(mean * 100)  # Scale mean slider value to range (-50 to 50)
-        # sigma = int(std_dev * 50)  # Scale standard deviation to range (0-50)
-        
         gaussian = np.random.normal(mean, sigma, image.shape).astype(np.int16)
         noisy_image = cv2.add(image.astype(np.int16), gaussian)
         return cv2.convertScaleAbs(noisy_image)
 
     @staticmethod
-    def add_salt_and_pepper_noise(image, noise_amount=0.5):  # noise_amount is from slider (0 to 1)
-        salt_prob = noise_amount * 0.05  # Map slider value to 0-5% noise
+    def add_salt_and_pepper_noise(image, noise_amount=0.5):  
+        salt_prob = noise_amount * 0.05  
         pepper_prob = salt_prob
         
         noisy_image = image.copy()
