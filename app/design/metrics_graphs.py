@@ -1,3 +1,5 @@
+import cv2
+import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from app.design.tools.gui_utilities import GUIUtilities
 
@@ -66,6 +68,80 @@ class Ui_PopWindow:
         self.buttonLayout.addWidget(self.close_button)
         self.buttonLayout.addStretch(1)
         self.layout.addLayout(self.buttonLayout)
+
+    def plot_histogram(self, image_path):
+        """Plot the histogram of the image."""
+        if not image_path:
+            print("Error: No image path provided.")
+            return
+
+        # Load the image in grayscale
+        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        if image is None:
+            print("Error: Unable to load image.")
+            return
+
+        # Calculate the histogram manually using NumPy
+        hist, bin_edges = np.histogram(image, bins=256, range=(0, 256))
+
+        # Ensure histogram_plot_widget is properly initialized
+        if not hasattr(self, 'histogram_plot_widget') or self.histogram_plot_widget is None:
+            print("Error: histogram_plot_widget is not initialized.")
+            return
+
+        # Clear previous plot
+        self.histogram_plot_widget.ax.clear()
+
+        # Plot histogram
+        self.histogram_plot_widget.ax.bar(bin_edges[:-1], hist, width=1, color='blue', edgecolor='black', linewidth=0.5)
+
+        # Set axis labels and title
+        self.histogram_plot_widget.ax.set_xlabel("Pixel Intensity")
+        self.histogram_plot_widget.ax.set_ylabel("Pixel Count")
+        self.histogram_plot_widget.ax.set_title("Histogram of Grayscale Image")
+
+        # Force the canvas to update
+        self.histogram_plot_widget.draw()
+
+    def plot_cdf(self, image_path):
+        """Plot the CDF of the image."""
+        if not image_path:
+            print("Error: No image path provided.")
+            return
+
+        # Load the image in grayscale
+        image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        if image is None:
+            print("Error: Unable to load image.")
+            return
+
+        # Compute histogram
+        hist, bin_edges = np.histogram(image, bins=256, range=(0, 256))
+
+        # Compute CDF
+        cdf = hist.cumsum()  # Cumulative sum of histogram
+        cdf_normalized = cdf / cdf[-1]  # Normalize to scale between 0 and 1
+
+        print("Plotting CDF...")
+
+        # Ensure distribution_plot_widget is properly initialized
+        if not hasattr(self, 'distribution_plot_widget') or self.distribution_plot_widget is None:
+            print("Error: distribution_plot_widget is not initialized.")
+            return
+
+        # Clear previous plot
+        self.distribution_plot_widget.ax.clear()
+
+        # Plot CDF
+        self.distribution_plot_widget.ax.plot(bin_edges[:-1], cdf_normalized, color='red', linewidth=2)
+
+        # Set axis labels and title
+        self.distribution_plot_widget.ax.set_xlabel("Pixel Intensity")
+        self.distribution_plot_widget.ax.set_ylabel("Cumulative Probability")
+        self.distribution_plot_widget.ax.set_title("Cumulative Distribution Function (CDF)")
+
+        # Force the canvas to update
+        self.distribution_plot_widget.draw()
 
     def show_popup(self):
         """ Method to show the pop-up window as a modal dialog. """
