@@ -242,7 +242,6 @@ class Ui_MainWindow(object):
         self.page_refine_image_layout = QtWidgets.QVBoxLayout(self.page_refine_image_controls)
         self.page_refine_image_layout.setSpacing(10)
 
-        # Add noise widgets to page_noise_layout
         self.setupRefineImageWidgets()
         self.sidebar_stacked.addWidget(self.page_refine_image_controls)
 
@@ -251,9 +250,16 @@ class Ui_MainWindow(object):
         self.page_fourier_filter_layout = QtWidgets.QVBoxLayout(self.page_fourier_filter_controls)
         self.page_fourier_filter_layout.setSpacing(10)
 
-        # Add noise widgets to page_noise_layout
         self.setupFourierFilterWidgets()
         self.sidebar_stacked.addWidget(self.page_fourier_filter_controls)
+
+        # PAGE 6: Threshold Controls
+        self.page_threshold_controls = QtWidgets.QWidget()
+        self.page_threshold_layout = QtWidgets.QVBoxLayout(self.page_threshold_controls)
+        self.page_threshold_layout.setSpacing(10)
+
+        self.setupThresholdWidgets()
+        self.sidebar_stacked.addWidget(self.page_threshold_controls)
 
         # By default, show page 0
         self.sidebar_stacked.setCurrentIndex(0)
@@ -270,7 +276,7 @@ class Ui_MainWindow(object):
         self.show_edge_detecting_options_button = self.util.createButton("Edge Detector", self.button_style, self.show_edge_detection_controls)
         self.show_metrics_button = self.util.createButton("View Metrics", self.button_style)
         self.show_refine_options_button = self.util.createButton("Refine Image", self.button_style, self.show_refine_image_controls)
-        self.show_threshold_options_button = self.util.createButton("Thresholding", self.button_style)
+        self.show_threshold_options_button = self.util.createButton("Thresholding", self.button_style, self.show_threshold_controls)
         self.grayscaling_button = self.util.createButton("Gray Scaling", self.button_style)
         self.show_fourier_filter_options_button = self.util.createButton("Fourier Filters", self.button_style, self.show_fourier_filter_controls)
         self.upload_hybrid_image_button = self.util.createButton("Hybrid Image", self.button_style)
@@ -495,6 +501,51 @@ class Ui_MainWindow(object):
         label03 = self.util.createLabel("", isHead=True)
         self.page_fourier_filter_layout.addWidget(label03)
 
+    def setupThresholdWidgets(self):
+        """
+        Creates the noise widgets (labels, sliders) and places them in page_noise_layout.
+        """
+        back_button = self.util.createButton("Back", self.button_style, self.show_main_buttons)
+        self.page_threshold_layout.addWidget(back_button)
+
+        # =========================================================================================================
+        local_threshold_label = self.util.createLabel("Local Threshold", isHead=True)
+        self.page_threshold_layout.addWidget(local_threshold_label)
+
+        block_size_label = self.util.createLabel("Block Size")
+        self.page_threshold_layout.addWidget(block_size_label)
+
+        (self.local_block_size_spinbox,
+         local_block_size_label,
+         local_block_size_layout) = self.util.createSpinBox(0, 100, 50)
+        self.page_threshold_layout.addLayout(local_block_size_layout)
+
+        constant_label = self.util.createLabel("Constant")
+        self.page_threshold_layout.addWidget(constant_label)
+
+        (self.local_constant_spinbox,
+         local_constant_label,
+         local_constant_layout) = self.util.createSpinBox(0, 100, 50)
+        self.page_threshold_layout.addLayout(local_constant_layout)
+
+        self.local_threshold_button = self.util.createButton("Apply", self.button_style)
+        self.page_threshold_layout.addWidget(self.local_threshold_button)
+
+        # =========================================================================================================
+        global_threshold_label = self.util.createLabel("Global Threshold", isHead=True)
+        self.page_threshold_layout.addWidget(global_threshold_label)
+
+        global_threshold_label = self.util.createLabel("Threshold")
+        self.page_threshold_layout.addWidget(global_threshold_label)
+
+        (self.global_threshold_spinbox,
+         global_threshold_threshold_label,
+         global_threshold_layout) = self.util.createSpinBox(0, 100, 50)
+        self.page_threshold_layout.addLayout(global_threshold_layout)
+
+        self.global_threshold_button = self.util.createButton("Apply", self.button_style)
+        self.page_threshold_layout.addWidget(self.global_threshold_button)
+
     def toggle_kernel_size(self, kernal_button):
         """
         Cycles through predefined kernal sizes and updates the button text to reflect the current selection.
@@ -576,3 +627,6 @@ class Ui_MainWindow(object):
 
     def show_fourier_filter_controls(self):
         self.sidebar_stacked.setCurrentIndex(5)
+
+    def show_threshold_controls(self):
+        self.sidebar_stacked.setCurrentIndex(6)
