@@ -163,11 +163,12 @@ class MainWindowController:
         """Apply normalization to the original image."""
         # Convert to grayscale if the image is in color
         if len(self.original_image.shape) == 3:
-            gray_image = self.convert.rgb_to_gray(self.original_image)
+            #gray_image = self.convert.rgb_to_gray(self.original_image)
+            img_normalized =self.normalize.normalize_image_rgb(self.original_image)
         else:
             gray_image = self.original_image
+            img_normalized = self.normalize.normalize_image(gray_image)
 
-        img_normalized = self.normalize.normalize_image(gray_image)
         # Update processed image with the equalized image
         self.processed_image = img_normalized
 
@@ -182,12 +183,13 @@ class MainWindowController:
 
         # Convert to grayscale if the image is in color
         if len(self.original_image.shape) == 3:
-            gray_image = self.convert.rgb_to_gray(self.original_image)
+            #gray_image = self.convert.rgb_to_gray(self.original_image)
+            equalized_image = self.equalize.equalizeHistRGB(self.original_image)
         else:
             gray_image = self.original_image
 
-        # Apply histogram equalization
-        equalized_image = self.equalize.equalizeHist(gray_image)
+            # Apply histogram equalization
+            equalized_image = self.equalize.equalizeHist(gray_image)
 
         # Update processed image with the equalized image
         self.processed_image = equalized_image
