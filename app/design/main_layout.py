@@ -419,7 +419,7 @@ class Ui_MainWindow(object):
 
         (self.edge_detection_high_threshold_spinbox,
          edge_detection_high_threshold_label,
-         edge_detection_high_threshold_layout) = self.util.createSpinBox(0, 100, 50)
+         edge_detection_high_threshold_layout) = self.util.createSpinBox(0, 200, 100)
         self.page_edge_detection_layout.addLayout(edge_detection_high_threshold_layout)
         self.edge_detection_high_threshold_spinbox.valueChanged.connect(self.update_low_threshold)
 
@@ -491,7 +491,7 @@ class Ui_MainWindow(object):
         self.page_fourier_filter_layout.addWidget(raduis_control_title)
         (self.raduis_control_slider,
          raduis_control_label,
-         raduis_control_layout) = self.util.createSlider(0, 100, 50, "%", self.slider_style, )
+         raduis_control_layout) = self.util.createSlider(0, 50, 25, "%", self.slider_style, )
         self.page_fourier_filter_layout.addLayout(raduis_control_layout)
 
         # label01 = self.util.createLabel("", isHead=True)
