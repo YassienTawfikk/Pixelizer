@@ -144,6 +144,7 @@ class Ui_MainWindow(object):
         self.upload_button = self.util.createButton("Upload", self.button_style)
         self.reset_image_button = self.util.createButton("Reset", self.button_style)
         self.save_image_button = self.util.createButton("Save", self.button_style)
+        self.clear_image_button = self.util.createButton("Clear", self.button_style)
 
         self.quit_app_button = self.util.createButton("X", self.quit_button_style)
         self.util.adjust_quit_button(self.quit_app_button)
@@ -153,6 +154,7 @@ class Ui_MainWindow(object):
         self.navbar_layout.addWidget(self.upload_button)
         self.navbar_layout.addWidget(self.reset_image_button)
         self.navbar_layout.addWidget(self.save_image_button)
+        self.navbar_layout.addWidget(self.clear_image_button)
         self.navbar_layout.addWidget(self.quit_app_button)
 
     def combineTitleAndNavbar(self):
