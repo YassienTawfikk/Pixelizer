@@ -635,22 +635,22 @@ class Ui_MainWindow(object):
             # Create the group boxes
             self.low_frequency_groupbox, _ = self.util.createGroupBox(
                 title="Low Frequency Image",
-                size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
-                                  int(self.screen_size.height() * (526 / 800))),
+                size=QtCore.QSize(int(self.screen_size.width() * (402 / 1280)),
+                                  int(self.screen_size.height() * (426 / 800))),
                 style=self.groupbox_style,
                 isGraph=False
             )
             self.high_frequency_groupbox, _ = self.util.createGroupBox(
                 title="High Frequency Image",
-                size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
-                                  int(self.screen_size.height() * (526 / 800))),
+                size=QtCore.QSize(int(self.screen_size.width() * (402 / 1280)),
+                                  int(self.screen_size.height() * (426 / 800))),
                 style=self.groupbox_style,
                 isGraph=False
             )
             self.hybrid_image_groupbox, _ = self.util.createGroupBox(
                 title="Hybrid Image",
-                size=QtCore.QSize(int(self.screen_size.width() * (502 / 1280)),
-                                  int(self.screen_size.height() * (526 / 800))),
+                size=QtCore.QSize(int(self.screen_size.width() * (402 / 1280)),
+                                  int(self.screen_size.height() * (426 / 800))),
                 style=self.groupbox_style,
                 isGraph=False
             )
