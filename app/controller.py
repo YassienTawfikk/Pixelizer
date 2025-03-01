@@ -83,6 +83,8 @@ class MainWindowController:
         self.ui.equalize_image_button.clicked.connect(self.equalize_image)
         self.ui.normalize_image_button.clicked.connect(self.normalize_image)
         self.ui.grayscaling_button.clicked.connect(self.gray_image_converter)
+        self.ui.local_threshold_button.clicked.connect(self.local_thresholding)
+        self.ui.global_threshold_button.clicked.connect(self.global_thresholding)
 
     def show_metrics(self):
         """Show the histogram and metrics popup."""
@@ -276,7 +278,7 @@ class MainWindowController:
         else:
             gray_image = self.original_image
 
-        threshold_value = 127
+        threshold_value = self.ui.global_threshold_spinbox.value()
         binary_global = self.threshold.global_threshold(gray_image, threshold_value)
 
         # Update processed image with the equalized image
@@ -298,9 +300,8 @@ class MainWindowController:
             gray_image = self.original_image
 
         # Apply custom local thresholding
-        block_size = 11  # Size of the neighborhood
-        C = 2  # Constant subtracted from the mean
-        binary_local = self.threshold.local_threshold(gray_image, block_size, C)
+        block_size = self.ui.local_block_size_spinbox.value()  # Size of the neighborhood
+        binary_local = self.threshold.local_threshold(gray_image, block_size, )
 
         # Update processed image with the equalized image
         self.processed_image = binary_local

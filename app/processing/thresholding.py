@@ -9,9 +9,9 @@ class Thresholding:
         return binary_image
 
     @staticmethod
-    def local_threshold(image, block_size, C):
+    def local_threshold(image, block_size):
         # Pad the image to handle borders
-        padded_image = cv2.copyMakeBorder(image, block_size // 2, block_size // 2, block_size // 2, block_size // 2, cv2.BORDER_CONSTANT, value=0)
+        padded_image =  np.pad(image, pad_width=block_size//2, mode='edge')#pad_width to ensure that the local block is centered around each pixel
         binary_image = np.zeros_like(image)
 
         # Iterate over each pixel
@@ -22,7 +22,7 @@ class Thresholding:
                 # Calculate the local mean
                 local_mean = np.mean(local_block)
                 # Determine the threshold
-                threshold = local_mean - C
+                threshold = local_mean
                 # Apply the threshold
                 binary_image[i, j] = 255 if image[i, j] > threshold else 0
 
