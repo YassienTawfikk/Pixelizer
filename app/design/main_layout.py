@@ -347,7 +347,7 @@ class Ui_MainWindow(object):
 
         (self.stddev_gaussian_noise_slider,
          stddev_val_label,
-         stddev_layout) = self.util.createSlider(min_value=0, max_value=20, initial_value=5, style=self.slider_style, isVisible=True)
+         stddev_layout) = self.util.createSlider(min_value=0, max_value=100, initial_value=50, style=self.slider_style, isVisible=True)
         self.page_noise_layout.addLayout(stddev_layout)
 
         self.gaussian_noise_button = self.util.createButton("Apply", self.button_style)
@@ -391,7 +391,7 @@ class Ui_MainWindow(object):
         self.page_filter_layout.addWidget(gaussian_filter_sigma_label)
         (self.gaussian_filter_sigma_spinbox,
          uniform_slider_label,
-         uniform_slider_layout) = self.util.createSpinBox(0, 10, 1)
+         uniform_slider_layout) = self.util.createSpinBox(1, 10, 1)
         self.page_filter_layout.addLayout(uniform_slider_layout)
         self.gaussian_filter_apply_button = self.util.createButton("Apply", self.button_style)
         self.page_filter_layout.addWidget(self.gaussian_filter_apply_button)
@@ -587,6 +587,7 @@ class Ui_MainWindow(object):
             style=self.groupbox_style,
             isGraph=False
         )
+
     '''def setupHybridImages(self):
         """Creates two group boxes: Original Image & Processed Image."""
         self.low_frequency_groupbox, _ = self.util.createGroupBox(
