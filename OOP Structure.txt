@@ -5,12 +5,6 @@ Pixelizer/
 ├── app/
 │   ├── controller.py
 │   │
-│   ├── processing/
-│   │   ├── edge_detection.py
-│   │   ├── histogram.py
-│   │   ├── noise_amount.py
-│   │   └── hybrid_image.py
-│   │
 │   ├── design/
 │   │   ├── tools/
 │   │   │   └── gui_utilities.py
@@ -20,8 +14,17 @@ Pixelizer/
 │   │   │   └── main_layout.ui
 │   │   │
 │   │   ├── metrics_graphs.py
-│   │   │
 │   │   └── main_layout.py
+│   │
+│   ├── processing/
+│   │   ├── denoise.py
+│   │   ├── edge_detection.py
+│   │   ├── fourier_filters.py
+│   │   ├── histogram_equalization.py
+│   │   ├── image_normalization.py
+│   │   ├── noise_amount.py
+│   │   ├── rgb_image_converter.py
+│   │   └── thresholding.py
 │   │
 │   ├── services/
 │   │   └── image_service.py
@@ -37,12 +40,6 @@ Pixelizer/
     │   └── icon.png
     │
     └── images/
-        ├── cat
-        ├── dog
         ├── image01
-        ├── image02
-        ├── image03
-        ├── image04
-        ├── image05
-        ├── image06
-        └── image07
+        ├── ......
+        └── image11
