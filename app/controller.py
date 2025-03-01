@@ -98,8 +98,8 @@ class MainWindowController:
         self.popup.setupUi(dialog)  # Initialize the UI
 
         # Plot the histogram
-        self.popup.plot_histogram(self.path)
-        self.popup.plot_cdf(self.path)
+        self.popup.plot_histogram_cdf(self.original_image,"original")
+        self.popup.plot_histogram_cdf(self.processed_image,"processed")
 
         # Show the popup
         dialog.exec_()
@@ -230,13 +230,11 @@ class MainWindowController:
 
     def normalize_image(self):
         """Apply normalization to the original image."""
-        # Convert to grayscale if the image is in color
-        if len(self.original_image.shape) == 3:
-            # gray_image = self.convert.rgb_to_gray(self.original_image)
-            img_normalized = self.normalize.normalize_image_rgb(self.original_image)
-        else:
-            gray_image = self.original_image
-            img_normalized = self.normalize.normalize_image(gray_image)
+        if self.original_image is None:
+            print("No image available for equalization.")
+            return
+
+        img_normalized = self.normalize.normalize_image_rgb(self.original_image)
 
         # Update processed image with the equalized image
         self.processed_image = img_normalized
@@ -247,18 +245,11 @@ class MainWindowController:
     def equalize_image(self):
         """Apply histogram equalization to the original image."""
         if self.original_image is None:
-            print("No processed image available for equalization.")
+            print("No image available for equalization.")
             return
 
-        # Convert to grayscale if the image is in color
-        if len(self.original_image.shape) == 3:
-            # gray_image = self.convert.rgb_to_gray(self.original_image)
-            equalized_image = self.equalize.equalizeHistRGB(self.original_image)
-        else:
-            gray_image = self.original_image
+        equalized_image= self.equalize.equalizeHistRGB(self.original_image)
 
-            # Apply histogram equalization
-            equalized_image = self.equalize.equalizeHist(gray_image)
 
         # Update processed image with the equalized image
         self.processed_image = equalized_image
@@ -269,7 +260,7 @@ class MainWindowController:
     def global_thresholding(self):
         """Apply global thresholding to the original image."""
         if self.original_image is None:
-            print("No processed image available for equalization.")
+            print("No image available for equalization.")
             return
 
         # Convert to grayscale if the image is in color

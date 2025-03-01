@@ -69,7 +69,8 @@ class Ui_PopWindow:
         self.buttonLayout.addStretch(1)
         self.layout.addLayout(self.buttonLayout)
 
-    def process_image(self,image_path):
+
+    def process_image(self, image_path):
         """Loads a grayscale image and computes its histogram."""
         if not image_path:
             print("Error: No image path provided.")
@@ -83,53 +84,79 @@ class Ui_PopWindow:
         hist, bin_edges = np.histogram(image, bins=256, range=(0, 256))
         return hist, bin_edges
 
-    def plot_graph(self,ax, x, y, plot_type="histogram"):
+    def plot_graph(self, ax, x, y_hist, y_cdf,title):
         """General function to plot histogram or CDF with enhanced styling."""
         ax.clear()
 
-        if plot_type == "histogram":
-            ax.bar(x[:-1], y, width=1, color="#F88379", edgecolor="black", linewidth=0.5, alpha=0.8)
-            ax.set_ylabel("Pixel Count", fontsize=12, fontweight="bold", color="white")
-            ax.set_title("Histogram of Grayscale Image", fontsize=14, fontweight="bold", color="lightblue")
-        elif plot_type == "cdf":
-            ax.plot(x[:-1], y, color="#FF5733", linestyle="--", linewidth=1, marker="o", markersize=3,
-                    markerfacecolor="white")
-            ax.set_ylabel("Cumulative Probability", fontsize=12, fontweight="bold", color="white")
-            ax.set_title("Cumulative Distribution Function (CDF)", fontsize=14, fontweight="bold", color="lightblue")
+        ax.bar(x[:-1], y_hist, width=1, color="#F88379", edgecolor="black", linewidth=0.5, alpha=0.8)
+        ax.set_title("Histogram and CDF for "+title+" image", fontsize=14, fontweight="bold", color="lightblue")
 
-        # Set axis labels, grid, and background styling
-        ax.set_xlabel("Pixel Intensity", fontsize=12, fontweight="bold", color="white")
+        ax.plot(x[:-1], y_cdf, color="#FF5733", linestyle="--", linewidth=1, marker="o", markersize=3,
+                markerfacecolor="white")
+
         ax.grid(True, linestyle="--", alpha=0.6)
         ax.set_facecolor("#202020")
         ax.figure.set_facecolor("#101010")
         ax.tick_params(axis="both", colors="white", labelsize=10)
 
-    def plot_histogram(self, image_path):
-        """Plots histogram using the refactored functions."""
-        hist, bin_edges = self.process_image(image_path)
-        if hist is None:
-            return
+    def plot_graph_RGB(self, ax, x, y_hist, y_cdf,hist_color,cdf_color,title):
+        """General function to plot histogram or CDF with enhanced styling."""
 
-        if not hasattr(self, 'histogram_plot_widget') or self.histogram_plot_widget is None:
-            print("Error: histogram_plot_widget is not initialized.")
-            return
+        ax.bar(x[:-1], y_hist, width=1, color=hist_color, edgecolor="black", linewidth=0.5, alpha=0.8)
 
-        self.plot_graph(self.histogram_plot_widget.ax, bin_edges, hist, plot_type="histogram")
-        self.histogram_plot_widget.draw()
+        ax.plot(x[:-1], y_cdf, color=cdf_color, linestyle="--", linewidth=1, marker="o", markersize=3,
+                markerfacecolor="white")
 
-    def plot_cdf(self, image_path):
+        ax.set_title("Histogram and CDF for "+title+" image", fontsize=14, fontweight="bold", color="lightblue")
+        ax.grid(True, linestyle="--", alpha=0.6)
+        ax.set_facecolor("#202020")
+        ax.figure.set_facecolor("#101010")
+        ax.tick_params(axis="both", colors="white", labelsize=10)
+
+
+
+    def plot_histogram_cdf(self, image,plot="processed"):
         """Plots CDF using the refactored functions."""
-        hist, bin_edges = self.process_image(image_path)
-        if hist is None:
-            return
 
         if not hasattr(self, 'distribution_plot_widget') or self.distribution_plot_widget is None:
             print("Error: distribution_plot_widget is not initialized.")
             return
 
-        cdf = hist.cumsum() / hist.sum()  # Normalize CDF
-        self.plot_graph(self.distribution_plot_widget.ax, bin_edges, cdf, plot_type="cdf")
-        self.distribution_plot_widget.draw()
+        if not hasattr(self, 'histogram_plot_widget') or self.histogram_plot_widget is None:
+            print("Error: distribution_plot_widget is not initialized.")
+            return
+
+        if plot=="processed":
+            self.distribution_plot_widget.ax.clear()
+        else:
+             self.histogram_plot_widget.ax.clear()
+
+        if len(image.shape) == 3:
+            hist_colors = ["#FF0000", "#008000", "#0000FF"]
+            cdf_colors = ["#FF7F7F", "#90EE90", "#ADD8E6"]
+            for i in range(3):
+                hist, bins = np.histogram(image[:, :, i].flatten(), bins=256, range=[0, 256])
+                pdf = hist / np.sum(hist)
+                cdf = np.cumsum(pdf)
+                if plot == "processed":
+                    self.plot_graph_RGB(self.distribution_plot_widget.ax,bins,hist,cdf*np.max(hist),hist_colors[i],cdf_colors[i],plot)
+                    self.distribution_plot_widget.draw()
+                else:
+                    self.plot_graph_RGB(self.histogram_plot_widget.ax,bins,hist,cdf*np.max(hist),hist_colors[i],cdf_colors[i],plot)
+                    self.histogram_plot_widget.draw()
+
+        else:
+            hist, bins = np.histogram(image, bins=256, range=(0, 256))
+            if hist is None:
+                return
+            pdf = hist / np.sum(hist)
+            cdf = np.cumsum(pdf) * np.max(hist)
+            if plot == "processed":
+                self.plot_graph(self.distribution_plot_widget.ax, bins, hist,cdf ,plot)
+                self.distribution_plot_widget.draw()
+            else:
+                self.plot_graph(self.histogram_plot_widget.ax, bins, hist,cdf,plot )
+                self.histogram_plot_widget.draw()
 
     def show_popup(self):
         """ Method to show the pop-up window as a modal dialog. """
