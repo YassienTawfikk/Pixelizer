@@ -601,15 +601,18 @@ class Ui_MainWindow(object):
         # Create upload buttons for low-frequency and high-frequency images
         self.upload_low_freq_button = self.util.createButton("Upload Image 1", self.button_style)
         self.upload_high_freq_button = self.util.createButton("Upload Image 2", self.button_style)
+        self.generate_hybrid_image_button = self.util.createButton("Hybrid Image", self.button_style)
 
         # Store the buttons as attributes of the class
         self.upload_low_freq_button.setObjectName("upload_low_freq_button")
         self.upload_high_freq_button.setObjectName("upload_high_freq_button")
+        self.generate_hybrid_image_button.setObjectName("generate_hybrid_image_button")
 
         # Create a horizontal layout for the upload buttons
         upload_buttons_layout = QtWidgets.QHBoxLayout()
         upload_buttons_layout.addWidget(self.upload_low_freq_button)
         upload_buttons_layout.addWidget(self.upload_high_freq_button)
+        upload_buttons_layout.addWidget(self.generate_hybrid_image_button)
 
         # Add the upload buttons layout to the page_hybrid_image_layout
         self.page_hybrid_image_layout.addLayout(upload_buttons_layout)

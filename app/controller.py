@@ -7,6 +7,7 @@ from app.processing.noise_amount import AddingNoise
 from app.design.metrics_graphs import Ui_PopWindow
 from app.processing.denoise import Denoise
 from app.processing.fourier_filers import FourierFilters
+from app.processing.hybrid_images import HybridImageGenerator
 
 import cv2
 from app.processing.histogram_equalization import EqualizeHistogram
@@ -36,6 +37,7 @@ class MainWindowController:
         self.noise = AddingNoise()
         self.denoise = Denoise()
         self.fft_filter = FourierFilters()
+        self.hybrid_generator = HybridImageGenerator()
 
         self.equalize = EqualizeHistogram()
         self.normalize = ImageNormalization()
@@ -96,6 +98,8 @@ class MainWindowController:
         # Connect the hybrid image upload buttons
         self.ui.upload_low_freq_button.clicked.connect(self.upload_low_frequency_image)
         self.ui.upload_high_freq_button.clicked.connect(self.upload_high_frequency_image)
+        self.ui.generate_hybrid_image_button.clicked.connect(self.hybrid_generation)
+
 
     def show_metrics(self):
         """Show the histogram and metrics popup."""
@@ -209,6 +213,21 @@ class MainWindowController:
             self.high_frequency_image = cv2.imread(self.path_2)
             self.srv.clear_image(self.ui.high_frequency_groupbox)
             self.srv.set_image_in_groupbox(self.ui.high_frequency_groupbox, self.high_frequency_image)
+
+    def hybrid_generation(self):
+        if self.low_frequency_image is None or self.high_frequency_image is None:
+            print("Please upload both low-frequency and high-frequency images first.")
+            return
+
+        # Generate the hybrid image
+        self.hybrid_image = self.hybrid_generator.generate_hybrid_image(
+            self.low_frequency_image, self.high_frequency_image, self.hybrid_image
+        )
+
+        # Display the hybrid image in the hybrid_image_groupbox
+        if self.hybrid_image is not None:
+            self.srv.clear_image(self.ui.hybrid_image_groupbox)
+            self.srv.set_image_in_groupbox(self.ui.hybrid_image_groupbox, self.hybrid_image)
 
     def drawImage(self):
         self.path = self.srv.upload_image_file()
