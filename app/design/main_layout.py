@@ -630,6 +630,7 @@ class Ui_MainWindow(object):
     def addHybridImageWidgets(self):
         """
         Dynamically creates and adds the group boxes for low-frequency, high-frequency, and hybrid images.
+        The group boxes are aligned horizontally next to each other, and the Back button is placed above them.
         """
         if self.low_frequency_groupbox is None:  # Check if widgets are already created
             # Create the group boxes
@@ -655,10 +656,14 @@ class Ui_MainWindow(object):
                 isGraph=False
             )
 
-            # Add the group boxes to the layout
-            self.page_hybrid_image_layout.addWidget(self.low_frequency_groupbox)
-            self.page_hybrid_image_layout.addWidget(self.high_frequency_groupbox)
-            self.page_hybrid_image_layout.addWidget(self.hybrid_image_groupbox)
+            # Create a horizontal layout for the group boxes
+            group_boxes_layout = QtWidgets.QHBoxLayout()
+            group_boxes_layout.addWidget(self.low_frequency_groupbox)
+            group_boxes_layout.addWidget(self.high_frequency_groupbox)
+            group_boxes_layout.addWidget(self.hybrid_image_groupbox)
+
+            # Add the horizontal layout to the page_hybrid_image_layout
+            self.page_hybrid_image_layout.addLayout(group_boxes_layout)
 
     def update_high_threshold(self, low_threshold_value):
         """
