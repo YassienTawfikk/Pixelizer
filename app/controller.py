@@ -21,6 +21,9 @@ class MainWindowController:
         self.MainWindow = QtWidgets.QMainWindow()
 
         self.path = None
+        self.path_1 = None
+        self.path_2 = None
+
         self.original_image = None
         self.processed_image = self.original_image
 
@@ -57,12 +60,6 @@ class MainWindowController:
         self.ui.quit_app_button.clicked.connect(self.closeApp)
         self.ui.upload_button.clicked.connect(self.drawImage)
 
-        # Connect the hybrid image upload buttons
-        if hasattr(self.ui, 'upload_low_freq_button'):
-            self.ui.upload_low_freq_button.clicked.connect(self.upload_low_frequency_image)
-        if hasattr(self.ui, 'upload_high_freq_button'):
-            self.ui.upload_high_freq_button.clicked.connect(self.upload_high_frequency_image)
-
         self.ui.save_image_button.clicked.connect(lambda: self.srv.save_image(self.processed_image))
 
         self.ui.clear_image_button.clicked.connect(self.clear_images)
@@ -96,27 +93,9 @@ class MainWindowController:
         self.ui.local_threshold_button.clicked.connect(self.local_thresholding)
         self.ui.global_threshold_button.clicked.connect(self.global_thresholding)
 
-    def upload_low_frequency_image(self):
-        """
-        Handles the upload of the low-frequency image.
-        """
-        path = self.srv.upload_image_file()  # Use your existing image upload service
-        if path:
-            self.low_frequency_image = cv2.imread(path)
-            self.srv.clear_image(self.ui.low_frequency_groupbox)
-            self.srv.set_image_in_groupbox(self.ui.low_frequency_groupbox, self.low_frequency_image)
-            # self.generate_hybrid_image()  # Generate the hybrid image after both images are uploaded
-
-    def upload_high_frequency_image(self):
-        """
-        Handles the upload of the high-frequency image.
-        """
-        path = self.srv.upload_image_file()  # Use your existing image upload service
-        if path:
-            self.high_frequency_image = cv2.imread(path)
-            self.srv.clear_image(self.ui.high_frequency_groupbox)
-            self.srv.set_image_in_groupbox(self.ui.high_frequency_groupbox, self.high_frequency_image)
-            # self.generate_hybrid_image()  # Generate the hybrid image after both images are uploaded
+        # Connect the hybrid image upload buttons
+        self.ui.upload_low_freq_button.clicked.connect(self.upload_low_frequency_image)
+        self.ui.upload_high_freq_button.clicked.connect(self.upload_high_frequency_image)
 
     def show_metrics(self):
         """Show the histogram and metrics popup."""
@@ -216,6 +195,20 @@ class MainWindowController:
     #     self.processed_image=self.fft_filter.apply_low_pass(self.original_image,radius)
 
     #     self.showProcessed()
+
+    def upload_low_frequency_image(self):
+        self.path_1 = self.srv.upload_image_file()
+        if self.path_1:
+            self.low_frequency_image = cv2.imread(self.path_1)
+            self.srv.clear_image(self.ui.low_frequency_groupbox)
+            self.srv.set_image_in_groupbox(self.ui.low_frequency_groupbox, self.low_frequency_image)
+
+    def upload_high_frequency_image(self):
+        self.path_2 = self.srv.upload_image_file()
+        if self.path_2:
+            self.high_frequency_image = cv2.imread(self.path_2)
+            self.srv.clear_image(self.ui.high_frequency_groupbox)
+            self.srv.set_image_in_groupbox(self.ui.high_frequency_groupbox, self.high_frequency_image)
 
     def drawImage(self):
         self.path = self.srv.upload_image_file()

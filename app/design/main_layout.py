@@ -598,11 +598,26 @@ class Ui_MainWindow(object):
         self.back_button = self.util.createButton("Back", self.button_style, self.show_main_buttons)
         self.page_hybrid_image_layout.addWidget(self.back_button)
 
+        # Create upload buttons for low-frequency and high-frequency images
+        self.upload_low_freq_button = self.util.createButton("Upload Image 1", self.button_style)
+        self.upload_high_freq_button = self.util.createButton("Upload Image 2", self.button_style)
+
+        # Store the buttons as attributes of the class
+        self.upload_low_freq_button.setObjectName("upload_low_freq_button")
+        self.upload_high_freq_button.setObjectName("upload_high_freq_button")
+
+        # Create a horizontal layout for the upload buttons
+        upload_buttons_layout = QtWidgets.QHBoxLayout()
+        upload_buttons_layout.addWidget(self.upload_low_freq_button)
+        upload_buttons_layout.addWidget(self.upload_high_freq_button)
+
+        # Add the upload buttons layout to the page_hybrid_image_layout
+        self.page_hybrid_image_layout.addLayout(upload_buttons_layout)
+
         # Placeholder for the group boxes (they will be created dynamically)
         self.low_frequency_groupbox = None
         self.high_frequency_groupbox = None
         self.hybrid_image_groupbox = None
-
     def addHybridImageWidgets(self):
         """
         Dynamically creates and adds the group boxes for low-frequency, high-frequency, and hybrid images.
@@ -632,27 +647,11 @@ class Ui_MainWindow(object):
                 isGraph=False
             )
 
-            # Create upload buttons for low-frequency and high-frequency images
-            self.upload_low_freq_button = self.util.createButton("Upload Image 1", self.button_style)
-            self.upload_high_freq_button = self.util.createButton("Upload Image 2", self.button_style)
-
-            # Store the buttons as attributes of the class
-            self.upload_low_freq_button.setObjectName("upload_low_freq_button")
-            self.upload_high_freq_button.setObjectName("upload_high_freq_button")
-
-            # Create a horizontal layout for the upload buttons
-            upload_buttons_layout = QtWidgets.QHBoxLayout()
-            upload_buttons_layout.addWidget(self.upload_low_freq_button)
-            upload_buttons_layout.addWidget(self.upload_high_freq_button)
-
             # Create a horizontal layout for the group boxes
             group_boxes_layout = QtWidgets.QHBoxLayout()
             group_boxes_layout.addWidget(self.low_frequency_groupbox)
             group_boxes_layout.addWidget(self.high_frequency_groupbox)
             group_boxes_layout.addWidget(self.hybrid_image_groupbox)
-
-            # Add the upload buttons layout to the page_hybrid_image_layout
-            self.page_hybrid_image_layout.addLayout(upload_buttons_layout)
 
             # Add the group boxes layout to the page_hybrid_image_layout
             self.page_hybrid_image_layout.addLayout(group_boxes_layout)
