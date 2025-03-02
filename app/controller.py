@@ -39,6 +39,11 @@ class MainWindowController:
         self.threshold = Thresholding()
         self.convert = RGBImageConverter()
 
+        #variables for hybrid images
+        self.low_frequency_image = None
+        self.high_frequency_image = None
+        self.hybrid_image = None
+
         # Connect signals to slots
         self.setupConnections()
 
@@ -51,6 +56,13 @@ class MainWindowController:
         """Connect buttons to their respective methods."""
         self.ui.quit_app_button.clicked.connect(self.closeApp)
         self.ui.upload_button.clicked.connect(self.drawImage)
+
+        # Connect the hybrid image upload buttons
+        if hasattr(self.ui, 'upload_low_freq_button'):
+            self.ui.upload_low_freq_button.clicked.connect(self.upload_low_frequency_image)
+        if hasattr(self.ui, 'upload_high_freq_button'):
+            self.ui.upload_high_freq_button.clicked.connect(self.upload_high_frequency_image)
+
         self.ui.save_image_button.clicked.connect(lambda: self.srv.save_image(self.processed_image))
 
         self.ui.clear_image_button.clicked.connect(self.clear_images)
@@ -75,8 +87,6 @@ class MainWindowController:
         # self.ui.hpf_button.clicked.connect(self.apply_fourier_filters)
         # self.ui.lpf_button.clicked.connect(self.apply_fourier_filters)
 
-        # self.ui.show_metrics_button.clicked.connect(lambda: ImageHistogram.show_histogram_popup(self.path))
-        # self.ui.show_metrics_button.clicked.connect(self.ui.popup.show_popup)
         # Connect the show_metrics_button to the new method
         self.ui.show_metrics_button.clicked.connect(self.show_metrics)
 
@@ -85,6 +95,28 @@ class MainWindowController:
         self.ui.grayscaling_button.clicked.connect(self.gray_image_converter)
         self.ui.local_threshold_button.clicked.connect(self.local_thresholding)
         self.ui.global_threshold_button.clicked.connect(self.global_thresholding)
+
+    def upload_low_frequency_image(self):
+        """
+        Handles the upload of the low-frequency image.
+        """
+        path = self.srv.upload_image_file()  # Use your existing image upload service
+        if path:
+            self.low_frequency_image = cv2.imread(path)
+            self.srv.clear_image(self.ui.low_frequency_groupbox)
+            self.srv.set_image_in_groupbox(self.ui.low_frequency_groupbox, self.low_frequency_image)
+            # self.generate_hybrid_image()  # Generate the hybrid image after both images are uploaded
+
+    def upload_high_frequency_image(self):
+        """
+        Handles the upload of the high-frequency image.
+        """
+        path = self.srv.upload_image_file()  # Use your existing image upload service
+        if path:
+            self.high_frequency_image = cv2.imread(path)
+            self.srv.clear_image(self.ui.high_frequency_groupbox)
+            self.srv.set_image_in_groupbox(self.ui.high_frequency_groupbox, self.high_frequency_image)
+            # self.generate_hybrid_image()  # Generate the hybrid image after both images are uploaded
 
     def show_metrics(self):
         """Show the histogram and metrics popup."""
