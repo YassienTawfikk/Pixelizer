@@ -89,9 +89,6 @@ class MainWindowController:
         self.ui.hpf_button.clicked.connect(lambda: self.apply_fourier_filters("High"))
         self.ui.lpf_button.clicked.connect(lambda: self.apply_fourier_filters("Low"))
 
-        # self.ui.hpf_button.clicked.connect(self.apply_fourier_filters)
-        # self.ui.lpf_button.clicked.connect(self.apply_fourier_filters)
-
         # Connect the show_metrics_button to the new method
         self.ui.show_metrics_button.clicked.connect(self.show_metrics)
 
@@ -195,15 +192,6 @@ class MainWindowController:
         print("processed image exists")
         self.showProcessed()
 
-    # def apply_fourier_filters(self):
-    #     if self.original_image is None:
-    #         print("No image loaded. Please upload an image first.")
-    #         return  
-
-    #     radius=self.ui.raduis_control_slider.value()
-    #     self.processed_image=self.fft_filter.apply_low_pass(self.original_image,radius)
-
-    #     self.showProcessed()
 
     def upload_low_frequency_image(self):
         self.path_1 = self.srv.upload_image_file()
