@@ -33,7 +33,7 @@ class FourierFilters:
         rows, cols = image.shape
         crow, ccol = rows // 2, cols // 2  # Center
 
-        radius = (radius / 100) * min(rows, cols)
+        # radius = (radius / 100) * min(rows, cols)
         mask = np.zeros((rows, cols), dtype=np.uint8)
         if mask_value == 0:
             mask = 1 - mask
