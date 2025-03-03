@@ -1,5 +1,7 @@
 import numpy as np
 import cv2
+
+
 class Thresholding:
     @staticmethod
     def global_threshold(image, threshold_value):
@@ -11,7 +13,7 @@ class Thresholding:
     @staticmethod
     def local_threshold(image, block_size):
         # Pad the image to handle borders
-        padded_image =  np.pad(image, pad_width=block_size//2, mode='edge')#pad_width to ensure that the local block is centered around each pixel
+        padded_image = np.pad(image, pad_width=block_size // 2, mode='edge')  # pad_width to ensure that the local block is centered around each pixel
         binary_image = np.zeros_like(image)
 
         # Iterate over each pixel

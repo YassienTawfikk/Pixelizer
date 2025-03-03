@@ -10,6 +10,8 @@ class MatplotlibCanvas(FigureCanvas):
         self.fig, self.ax = Figure(figsize=(5, 4), dpi=100), None
         self.ax = self.fig.add_subplot(111)  # Single subplot
         super().__init__(self.fig)
+
+
 class GUIUtilities:
     def __init__(self):
         pass  # Initialize any instance variables if necessary

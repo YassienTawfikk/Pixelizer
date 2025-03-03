@@ -1,15 +1,21 @@
+# Core PyQt5 module
 from PyQt5 import QtWidgets
+
+# Core utility and services
 from app.utils.clean_cache import remove_directories
 from app.services.image_service import ImageServices
+
+# Main GUI design
 from app.design.main_layout import Ui_MainWindow
+from app.design.metrics_graphs import Ui_PopWindow
+
+# Image processing functionality
+import cv2
 from app.processing.edge_detection import EdgeDetection
 from app.processing.noise_amount import AddingNoise
-from app.design.metrics_graphs import Ui_PopWindow
 from app.processing.denoise import Denoise
 from app.processing.fourier_filers import FourierFilters
 from app.processing.hybrid_images import HybridImageGenerator
-
-import cv2
 from app.processing.histogram_equalization import EqualizeHistogram
 from app.processing.image_normalization import ImageNormalization
 from app.processing.thresholding import Thresholding
@@ -44,7 +50,7 @@ class MainWindowController:
         self.threshold = Thresholding()
         self.convert = RGBImageConverter()
 
-        #variables for hybrid images
+        # variables for hybrid images
         self.low_frequency_image = None
         self.high_frequency_image = None
         self.hybrid_image = None
@@ -100,7 +106,6 @@ class MainWindowController:
         self.ui.upload_high_freq_button.clicked.connect(self.upload_high_frequency_image)
         self.ui.generate_hybrid_image_button.clicked.connect(self.hybrid_generation)
 
-
     def show_metrics(self):
         """Show the histogram and metrics popup."""
         if self.path is None:
@@ -113,8 +118,8 @@ class MainWindowController:
         self.popup.setupUi(dialog)  # Initialize the UI
 
         # Plot the histogram
-        self.popup.plot_histogram_cdf(self.original_image,"original")
-        self.popup.plot_histogram_cdf(self.processed_image,"processed")
+        self.popup.plot_histogram_cdf(self.original_image, "original")
+        self.popup.plot_histogram_cdf(self.processed_image, "processed")
 
         # Show the popup
         dialog.exec_()
@@ -292,8 +297,7 @@ class MainWindowController:
             print("No image available for equalization.")
             return
 
-        equalized_image= self.equalize.equalizeHistRGB(self.original_image)
-
+        equalized_image = self.equalize.equalizeHistRGB(self.original_image)
 
         # Update processed image with the equalized image
         self.processed_image = equalized_image

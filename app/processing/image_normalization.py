@@ -1,8 +1,9 @@
 import numpy as np
 
+
 class ImageNormalization:
     @staticmethod
-    def normalize_image( gray_image):
+    def normalize_image(gray_image):
         """Normalize the image to the range [0, 255]."""
         # Find the minimum and maximum pixel values
         min_val = np.min(gray_image)

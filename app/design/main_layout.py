@@ -621,6 +621,7 @@ class Ui_MainWindow(object):
         self.low_frequency_groupbox = None
         self.high_frequency_groupbox = None
         self.hybrid_image_groupbox = None
+
     def addHybridImageWidgets(self):
         """
         Dynamically creates and adds the group boxes for low-frequency, high-frequency, and hybrid images.

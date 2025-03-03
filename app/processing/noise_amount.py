@@ -1,26 +1,27 @@
 import cv2
 import numpy as np
 
+
 class AddingNoise:
 
     @staticmethod
-    def add_uniform_noise(image, noise_amount=0.5):  
-        high = int(noise_amount * 100)  
+    def add_uniform_noise(image, noise_amount=0.5):
+        high = int(noise_amount * 100)
         noise = np.random.uniform(-high, high, image.shape).astype(np.int16)
         noisy_image = cv2.add(image.astype(np.int16), noise)
         return cv2.convertScaleAbs(noisy_image)
 
     @staticmethod
-    def add_gaussian_noise(image, mean=0.0, sigma=0.5):  
+    def add_gaussian_noise(image, mean=0.0, sigma=0.5):
         gaussian = np.random.normal(mean, sigma, image.shape).astype(np.int16)
         noisy_image = cv2.add(image.astype(np.int16), gaussian)
         return cv2.convertScaleAbs(noisy_image)
 
     @staticmethod
-    def add_salt_and_pepper_noise(image, noise_amount=0.5):  
-        salt_prob = noise_amount * 0.05  
+    def add_salt_and_pepper_noise(image, noise_amount=0.5):
+        salt_prob = noise_amount * 0.05
         pepper_prob = salt_prob
-        
+
         noisy_image = image.copy()
         h, w = image.shape[:2]
         channels = 1 if len(image.shape) == 2 else image.shape[2]
