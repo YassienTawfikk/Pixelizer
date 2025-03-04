@@ -9,7 +9,7 @@ class HybridImageGenerator:
         self.high_frequency_image = None
         self.hybrid_image = None
 
-    def generate_hybrid_image(self, low_freq_image, high_freq_image, hybrid_image, low_pass_radius=10, high_pass_radius=30):
+    def generate_hybrid_image(self, low_freq_image, high_freq_image, hybrid_image, low_pass_radius=20, high_pass_radius=5):
         """
         Generate a hybrid image by combining the low-frequency components of one image
         with the high-frequency components of another.
