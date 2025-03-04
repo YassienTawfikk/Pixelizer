@@ -31,9 +31,10 @@ class FourierFilters:
     def __apply_filter_grayscale(image, radius=20, mask_value=1):
         image_fourier = FourierFilters.get_fft(image)
         rows, cols = image.shape
-        crow, ccol = rows // 2, cols // 2  # Center
+        crow, ccol = rows // 2, cols // 2  
 
         # radius = (radius / 100) * min(rows, cols)
+        # radius = radius/2
         mask = np.zeros((rows, cols), dtype=np.uint8)
         if mask_value == 0:
             mask = 1 - mask
@@ -44,11 +45,11 @@ class FourierFilters:
                     mask[i, j] = mask_value
 
         filtered_dft = image_fourier * mask
-        dft_inverse = np.fft.ifftshift(filtered_dft)  # Shift back
-        filtered_image = np.fft.ifft2(dft_inverse)  # Inverse Fourier Transform
+        dft_inverse = np.fft.ifftshift(filtered_dft)  
+        filtered_image = np.fft.ifft2(dft_inverse) 
 
-        filtered_image = np.real(filtered_image)  # Keep only real part
-        filtered_image = np.clip(filtered_image, 0, 255)  # Clip to valid range
-        filtered_image = filtered_image.astype(np.uint8)  # Convert to uint8
+        filtered_image = np.real(filtered_image) 
+        filtered_image = np.clip(filtered_image, 0, 255)  
+        filtered_image = filtered_image.astype(np.uint8) 
 
         return filtered_image

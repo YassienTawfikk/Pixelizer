@@ -39,10 +39,6 @@ class MainWindowController:
 
         self.srv = ImageServices()
 
-        self.edge = EdgeDetection()
-        self.noise = AddingNoise()
-        self.denoise = Denoise()
-        self.fft_filter = FourierFilters()
         self.hybrid_generator = HybridImageGenerator()
 
         self.equalize = EqualizeHistogram()
@@ -129,14 +125,15 @@ class MainWindowController:
 
         if type == "Uniform":
             amount = self.ui.uniform_noise_slider.value() / 100
-            self.processed_image = self.noise.add_uniform_noise(self.original_image, amount)
+            self.processed_image = AddingNoise.add_uniform_noise(self.original_image, amount)
         elif type == "Gaussian":
             mean = self.ui.mean_gaussian_noise_slider.value()
             stdev = self.ui.stddev_gaussian_noise_slider.value()
-            self.processed_image = self.noise.add_gaussian_noise(self.original_image, mean, stdev)
+            self.processed_image = AddingNoise.add_gaussian_noise(self.original_image, mean, stdev)
         elif type == "Salt&Pepper":
             amount = self.ui.salt_pepper_noise_slider.value() / 100
-            self.processed_image = self.noise.add_salt_and_pepper_noise(self.original_image, amount)
+            self.processed_image = AddingNoise.add_salt_and_pepper_noise(self.original_image, amount)
+
 
         self.showProcessed()
 
@@ -148,11 +145,11 @@ class MainWindowController:
         sigma = self.ui.gaussian_filter_sigma_spinbox.value()
 
         if type == "Average":
-            self.processed_image = self.denoise.apply_average_filter(self.processed_image, self.ui.current_kernal_size)
+            self.processed_image = Denoise.apply_average_filter(self.processed_image, self.ui.current_kernal_size)
         elif type == "Gaussian":
-            self.processed_image = self.denoise.apply_gaussian_filter(self.processed_image, self.ui.current_kernal_size, sigma)
+            self.processed_image = Denoise.apply_gaussian_filter(self.processed_image, self.ui.current_kernal_size, sigma)
         elif type == "Median":
-            self.processed_image = self.denoise.apply_median_filter(self.processed_image, self.ui.current_kernal_size)
+            self.processed_image = Denoise.apply_median_filter(self.processed_image, self.ui.current_kernal_size)
 
         self.showProcessed()
 
@@ -165,15 +162,15 @@ class MainWindowController:
             self.original_image = cv2.cvtColor(self.original_image, cv2.COLOR_RGB2GRAY)
 
         if type == "Sobel":
-            self.processed_image = self.edge.apply_sobel(self.original_image)
+            self.processed_image = EdgeDetection.apply_sobel(self.original_image)
         elif type == "Roberts":
-            self.processed_image = self.edge.apply_roberts(self.original_image)
+            self.processed_image = EdgeDetection.apply_roberts(self.original_image)
         elif type == "Prewitt":
-            self.processed_image = self.edge.apply_prewitt(self.original_image)
+            self.processed_image = EdgeDetection.apply_prewitt(self.original_image)
         elif type == "Canny":
             low = self.ui.edge_detection_low_threshold_spinbox.value()
             high = self.ui.edge_detection_high_threshold_spinbox.value()
-            self.processed_image = self.edge.apply_canny(self.original_image, low, high)
+            self.processed_image = EdgeDetection.apply_canny(self.original_image, low, high)
 
         self.showProcessed()
 
@@ -185,11 +182,10 @@ class MainWindowController:
         radius = self.ui.raduis_control_slider.value()
 
         if type == "High":
-            self.processed_image = self.fft_filter.apply_high_pass(self.original_image, radius)
+            self.processed_image = FourierFilters.apply_high_pass(self.original_image, radius)
         elif type == "Low":
-            self.processed_image = self.fft_filter.apply_low_pass(self.original_image, radius)
+            self.processed_image = FourierFilters.apply_low_pass(self.original_image, radius)
 
-        print("processed image exists")
         self.showProcessed()
 
 
