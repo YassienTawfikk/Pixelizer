@@ -532,14 +532,6 @@ class Ui_MainWindow(object):
          local_block_size_layout) = self.util.createSpinBox(0, 100, 50)
         self.page_threshold_layout.addLayout(local_block_size_layout)
 
-        constant_label = self.util.createLabel("Constant")
-        self.page_threshold_layout.addWidget(constant_label)
-
-        (self.local_constant_spinbox,
-         local_constant_label,
-         local_constant_layout) = self.util.createSpinBox(0, 100, 50)
-        self.page_threshold_layout.addLayout(local_constant_layout)
-
         self.local_threshold_button = self.util.createButton("Apply", self.button_style)
         self.page_threshold_layout.addWidget(self.local_threshold_button)
 
@@ -557,6 +549,14 @@ class Ui_MainWindow(object):
 
         self.global_threshold_button = self.util.createButton("Apply", self.button_style)
         self.page_threshold_layout.addWidget(self.global_threshold_button)
+
+        label01 = self.util.createLabel("", isHead=True)
+        self.page_threshold_layout.addWidget(label01)
+        label02 = self.util.createLabel("", isHead=True)
+        self.page_threshold_layout.addWidget(label02)
+        label03 = self.util.createLabel("", isHead=True)
+        self.page_threshold_layout.addWidget(label03)
+
 
     def toggle_kernel_size(self, kernal_button):
         """
