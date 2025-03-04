@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class EqualizeHistogram:
     @staticmethod
     def equalizeHist(image):

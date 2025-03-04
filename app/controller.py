@@ -216,6 +216,14 @@ class MainWindowController:
         self.hybrid_image = self.hybrid_generator.generate_hybrid_image(
             self.low_frequency_image, self.high_frequency_image, self.hybrid_image
         )
+        low_freq_filtered = self.fft_filter.apply_low_pass(self.low_frequency_image, 20)
+        self.srv.clear_image(self.ui.low_frequency_groupbox)
+        self.srv.set_image_in_groupbox(self.ui.low_frequency_groupbox, low_freq_filtered)
+
+        high_freq_filtered = self.fft_filter.apply_high_pass(self.high_frequency_image, 5)
+        self.srv.clear_image(self.ui.high_frequency_groupbox)
+        self.srv.set_image_in_groupbox(self.ui.high_frequency_groupbox, high_freq_filtered)
+
 
         # Display the hybrid image in the hybrid_image_groupbox
         if self.hybrid_image is not None:
