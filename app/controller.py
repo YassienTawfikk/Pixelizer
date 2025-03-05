@@ -192,7 +192,6 @@ class MainWindowController:
         print("processed image exists")
         self.showProcessed()
 
-
     def upload_low_frequency_image(self):
         self.path_1 = self.srv.upload_image_file()
         if self.path_1:
@@ -223,7 +222,6 @@ class MainWindowController:
         high_freq_filtered = self.fft_filter.apply_high_pass(self.high_frequency_image, 5)
         self.srv.clear_image(self.ui.high_frequency_groupbox)
         self.srv.set_image_in_groupbox(self.ui.high_frequency_groupbox, high_freq_filtered)
-
 
         # Display the hybrid image in the hybrid_image_groupbox
         if self.hybrid_image is not None:

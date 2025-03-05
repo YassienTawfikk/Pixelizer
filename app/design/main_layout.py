@@ -557,7 +557,6 @@ class Ui_MainWindow(object):
         label03 = self.util.createLabel("", isHead=True)
         self.page_threshold_layout.addWidget(label03)
 
-
     def toggle_kernel_size(self, kernal_button):
         """
         Cycles through predefined kernal sizes and updates the button text to reflect the current selection.
