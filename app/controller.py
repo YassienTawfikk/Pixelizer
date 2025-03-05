@@ -125,14 +125,14 @@ class MainWindowController:
 
         if type == "Uniform":
             amount = self.ui.uniform_noise_slider.value() / 100
-            self.processed_image = AddingNoise.add_uniform_noise(self.original_image, amount)
+            self.processed_image = AddingNoise.add_uniform_noise(self.processed_image, amount)
         elif type == "Gaussian":
             mean = self.ui.mean_gaussian_noise_slider.value()
             stdev = self.ui.stddev_gaussian_noise_slider.value()
-            self.processed_image = AddingNoise.add_gaussian_noise(self.original_image, mean, stdev)
+            self.processed_image = AddingNoise.add_gaussian_noise(self.processed_image, mean, stdev)
         elif type == "Salt&Pepper":
             amount = self.ui.salt_pepper_noise_slider.value() / 100
-            self.processed_image = AddingNoise.add_salt_and_pepper_noise(self.original_image, amount)
+            self.processed_image = AddingNoise.add_salt_and_pepper_noise(self.processed_image, amount)
 
 
         self.showProcessed()

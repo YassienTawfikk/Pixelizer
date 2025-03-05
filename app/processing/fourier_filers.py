@@ -14,14 +14,15 @@ class FourierFilters:
     @staticmethod
     def apply_low_pass(image, radius=30):
         # call the apply filter function and pass the mask value as 1 for LPF
+        print(image.shape)
         return FourierFilters.__apply_filter(image, radius, 1)
 
     @staticmethod
     def apply_high_pass(image, radius=30):
-        # call the apply filter function and pass the mask value as 1 for HPF
+        # call the apply filter function and pass the mask value as 0 for HPF
         return FourierFilters.__apply_filter(image, radius, 0)
 
-    def __apply_filter(self, image, radius=20, mask_value=1):
+    def __apply_filter(image, radius=20, mask_value=1):
         # image is RGB
         if len(image.shape) == 3:
             # create an array to hold the values of each channel
@@ -38,7 +39,7 @@ class FourierFilters:
         else:
             return FourierFilters.__apply_filter_grayscale(image, radius, mask_value)
 
-    def __apply_filter_grayscale(self, image, radius=20, mask_value=1):
+    def __apply_filter_grayscale(image, radius=20, mask_value=1):
         # obtain the fft of the image
         image_fourier = FourierFilters.get_fft(image)
         # find number of image rows and columns
@@ -50,8 +51,8 @@ class FourierFilters:
         mask = np.zeros((rows, cols), dtype=np.uint8)
         print(image.shape)
 
-        max_radius = min(rows, cols) / 2
-        radius = (radius / 50) * max_radius  # Scale 0-50% to 0-max_radius
+        # max_radius = min(rows, cols) / 2
+        # radius = (radius / 50) * max_radius  # Scale 0-50% to 0-max_radius
 
         # initialize to 0 for LPF, and to 1 for HPF
         if mask_value == 0:

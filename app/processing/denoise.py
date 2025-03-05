@@ -3,8 +3,7 @@ import numpy as np
 
 class Denoise:
 
-    @staticmethod
-    def convolve(image, kernel, kernel_size, median=False):
+    def __convolve(image, kernel, kernel_size, median=False):
         # calculate the padding size
         pad_size=kernel_size//2
 
@@ -58,7 +57,7 @@ class Denoise:
         # create a kernel of ones and normalize it according to the kernel size
         kernel = np.ones((kernel_size, kernel_size), dtype=np.float32) / (kernel_size ** 2)
         # convolve the image with the kernel
-        output=Denoise.convolve(image,kernel,kernel_size)
+        output=Denoise.__convolve(image,kernel,kernel_size)
         return output
   
 
@@ -83,10 +82,10 @@ class Denoise:
         # generate a gaussian kernel 
         kernel = Denoise.gaussian_kernel(kernel_size, sigma)
         # convolve the image with the kernel
-        output=Denoise.convolve(image,kernel,kernel_size)
+        output=Denoise.__convolve(image,kernel,kernel_size)
         return output
 
     @staticmethod
     def apply_median_filter(image, kernel_size=3):
-        output=Denoise.convolve(image,None,kernel_size,True)
+        output=Denoise.__convolve(image,None,kernel_size,True)
         return output

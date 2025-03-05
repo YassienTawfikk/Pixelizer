@@ -4,8 +4,7 @@ import numpy as np
 
 class EdgeDetection:
 
-    @staticmethod
-    def convolve(image, kernel, roberts=False):
+    def __convolve(image, kernel, roberts=False):
         # determine kernel height and width based on the kernel passed to the function
         kernel_height, kernel_width = kernel.shape
 
@@ -38,8 +37,8 @@ class EdgeDetection:
         sobel_y = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
 
         # get the gradient (convolution) of each kernel over the image
-        grad_x = EdgeDetection.convolve(image, sobel_x)
-        grad_y = EdgeDetection.convolve(image, sobel_y)
+        grad_x = EdgeDetection.__convolve(image, sobel_x)
+        grad_y = EdgeDetection.__convolve(image, sobel_y)
 
         # compute the magnitude of the gradients and cast to type uint8 to avoid overflow 
         return np.sqrt(grad_x ** 2 + grad_y ** 2).astype(np.uint8)
@@ -51,8 +50,8 @@ class EdgeDetection:
         roberts_y = np.array([[0, 1], [-1, 0]])
 
         # get the gradient (convolution) of each kernel over the image
-        grad_x = EdgeDetection.convolve(image, roberts_x, True)
-        grad_y = EdgeDetection.convolve(image, roberts_y, True)
+        grad_x = EdgeDetection.__convolve(image, roberts_x, True)
+        grad_y = EdgeDetection.__convolve(image, roberts_y, True)
 
         # compute the magnitude of the gradients and cast to type uint8 to avoid overflow 
         return np.sqrt(grad_x ** 2 + grad_y ** 2).astype(np.uint8)
@@ -64,8 +63,8 @@ class EdgeDetection:
         prewitt_y = np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]])
 
         # get the gradient (convolution) of each kernel over the image
-        grad_x = EdgeDetection.convolve(image, prewitt_x)
-        grad_y = EdgeDetection.convolve(image, prewitt_y)
+        grad_x = EdgeDetection.__convolve(image, prewitt_x)
+        grad_y = EdgeDetection.__convolve(image, prewitt_y)
 
         # compute the magnitude of the gradients and cast to type uint8 to avoid overflow 
         return np.sqrt(grad_x ** 2 + grad_y ** 2).astype(np.uint8)
