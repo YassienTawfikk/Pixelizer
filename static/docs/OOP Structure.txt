@@ -48,5 +48,5 @@ Pixelizer/
     │   └── image11
     │
     └── docs/
-        ├── report.pdf
-        └── oop_structure.txt
+        ├── Report.pdf
+        └── OOP Structure.txt
