@@ -1,5 +1,7 @@
 Pixelizer/
 │
+├── README.md
+├── requirements.txt
 ├── main.py
 │
 ├── app/
@@ -21,6 +23,7 @@ Pixelizer/
 │   │   ├── edge_detection.py
 │   │   ├── fourier_filters.py
 │   │   ├── histogram_equalization.py
+│   │   ├── hybrid_image.py
 │   │   ├── image_normalization.py
 │   │   ├── noise_amount.py
 │   │   ├── rgb_image_converter.py
@@ -39,7 +42,11 @@ Pixelizer/
     ├── icons/
     │   └── icon.png
     │
-    └── images/
-        ├── image01
-        ├── ......
-        └── image11
+    ├── images/
+    │   ├── image01
+    │   ├── ......
+    │   └── image11
+    │
+    └── docs/
+        ├── report.pdf
+        └── oop_structure.txt
