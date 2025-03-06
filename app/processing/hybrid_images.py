@@ -1,6 +1,7 @@
 import cv2
 from app.processing.fourier_filers import FourierFilters
 
+
 class HybridImageGenerator:
     def __init__(self):
         self.low_frequency_image = None

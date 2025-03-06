@@ -2,7 +2,6 @@ import numpy as np
 
 
 class FourierFilters:
-
     @staticmethod
     def get_fft(image):
         # computes the fft of the image
@@ -34,7 +33,7 @@ class FourierFilters:
 
             # stack the filtered channels over each other to return to RGB
             return np.stack(channels, axis=2)
-        
+
         # for a greyscale image (one channel) apply grayscale filtering directly
         else:
             return FourierFilters.__apply_filter_grayscale(image, radius, mask_value)
@@ -45,7 +44,7 @@ class FourierFilters:
         # find number of image rows and columns
         rows, cols = image.shape
         # find the center coordinates of the image
-        crow, ccol = rows // 2, cols // 2  
+        crow, ccol = rows // 2, cols // 2
 
         # create a mask array thats the same size as the image
         mask = np.zeros((rows, cols), dtype=np.uint8)
@@ -65,12 +64,12 @@ class FourierFilters:
                     # if so fill in the circle values with the mask value
                     mask[i, j] = mask_value
 
-        filtered_dft = image_fourier * mask                  # multiply the fft of the image by the mask
-        dft_inverse = np.fft.ifftshift(filtered_dft)         #shift the spectrum back to the original format
-        filtered_image = np.fft.ifft2(dft_inverse)           #apply inverse fft
+        filtered_dft = image_fourier * mask  # multiply the fft of the image by the mask
+        dft_inverse = np.fft.ifftshift(filtered_dft)  # shift the spectrum back to the original format
+        filtered_image = np.fft.ifft2(dft_inverse)  # apply inverse fft
 
-        filtered_image = np.real(filtered_image)             #extract only the real values of the filtered image to avoid complex ones
-        filtered_image = np.clip(filtered_image, 0, 255)     #clip pixels to the [0-255] range
-        filtered_image = filtered_image.astype(np.uint8)     #cast pixel values to uint8 
+        filtered_image = np.real(filtered_image)  # extract only the real values of the filtered image to avoid complex ones
+        filtered_image = np.clip(filtered_image, 0, 255)  # clip pixels to the [0-255] range
+        filtered_image = filtered_image.astype(np.uint8)  # cast pixel values to uint8
 
         return filtered_image

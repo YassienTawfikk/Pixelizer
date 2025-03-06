@@ -3,7 +3,6 @@ import numpy as np
 
 
 class AddingNoise:
-
     @staticmethod
     def add_uniform_noise(image, noise_amount=0.5):
         # calculate the maximum value of noise pixel values
@@ -21,7 +20,7 @@ class AddingNoise:
     @staticmethod
     def add_gaussian_noise(image, mean=0.0, sigma=0.5):
         # creates an array of the same size of image with normally distributed random values
-        #the mean and std determine the gaussian distribution shape (bell curve)
+        # the mean and std determine the gaussian distribution shape (bell curve)
         gaussian = np.random.normal(mean, sigma, image.shape).astype(np.int16)
 
         # add noise onto the image
@@ -38,14 +37,14 @@ class AddingNoise:
         # takes a copy of the image
         noisy_image = image.copy()
         h, w = image.shape[:2]
-        
+
         # Check if the image is grayscale or RGB
         if len(image.shape) == 2:
-            channels = 1 
+            channels = 1
         else:
-            channels = image.shape[2] 
+            channels = image.shape[2]
 
-        # calculate number of salt and pepper pixels
+            # calculate number of salt and pepper pixels
         num_salt = int(salt_prob * h * w * channels)
         num_pepper = int(pepper_prob * h * w * channels)
 

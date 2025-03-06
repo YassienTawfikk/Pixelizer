@@ -3,7 +3,6 @@ import numpy as np
 
 
 class EdgeDetection:
-
     def __convolve(image, kernel, roberts=False):
         # determine kernel height and width based on the kernel passed to the function
         kernel_height, kernel_width = kernel.shape
