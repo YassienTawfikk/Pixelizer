@@ -3,7 +3,7 @@
 ## 🚀 Overview
 Pixelizing is a comprehensive image processing application designed to demonstrate and apply various image manipulation techniques such as noise addition, filtering, edge detection, and more. This toolkit is developed using Python and OpenCV, along with custom algorithms crafted from scratch, leveraging Object-Oriented Programming (OOP) principles for modularity, scalability, and maintainability.
 
-<img src="https://github.com/user-attachments/assets/cab1850e-b531-424e-ab63-fabd71c15dad" width="80%" alt="App UI">
+<img src="https://github.com/user-attachments/assets/0aa92ef3-5098-45b9-a77f-ede290870fc6" width="75%" alt="App UI">
 
 ## 🎯 Features
 
