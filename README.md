@@ -5,6 +5,15 @@ Pixelizing is a comprehensive image processing application designed to demonstra
 
 <img src="https://github.com/user-attachments/assets/0aa92ef3-5098-45b9-a77f-ede290870fc6" width="75%" alt="App UI">
 
+---
+
+### **Video Demo**
+Watch a detailed demonstration of the application in action here:
+
+[View Video](https://github.com/user-attachments/assets/a20275b8-5615-445a-bec8-edf227da7d56)
+
+---
+
 ## 🎯 Features
 
 ### Noise Addition
