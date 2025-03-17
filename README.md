@@ -71,9 +71,8 @@ pip install -r requirements.txt
 
 To start using the Pixelizing toolkit, run the main application file after installation:
 
-```python
-python
-main.py
+```bash
+python main.py
 ```
 
 Interact with the GUI to choose images and apply different processing techniques.
