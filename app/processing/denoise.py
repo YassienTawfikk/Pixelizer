@@ -6,6 +6,8 @@ class Denoise:
         # calculate the padding size
         pad_size = kernel_size // 2
 
+        flipped_kernel = np.flipud(np.fliplr(kernel))  # Flip both vertically and horizontally
+
         # if the image is RGB
         if len(image.shape) == 3:
             # initialize a zeroed array of the same size of the image
@@ -24,7 +26,7 @@ class Denoise:
 
                         # for average and gaussian filtering, return a pixel value of the summation of the kernel multiplied by the region
                         if median == False:
-                            filtered_image[i, j, c] = np.sum(region * kernel)
+                            filtered_image[i, j, c] = np.sum(region * flipped_kernel)
                         # for median filtering return a pixel value that the median of the region
                         if median == True:
                             filtered_image[i, j, c] = np.median(region)

@@ -7,6 +7,8 @@ class EdgeDetection:
         # determine kernel height and width based on the kernel passed to the function
         kernel_height, kernel_width = kernel.shape
 
+        flipped_kernel = np.flipud(np.fliplr(kernel))  # Flip both vertically and horizontally
+
         # determine size of image padding. if type is Roberts padding size is always 1
         if roberts == False:
             pad_h, pad_w = kernel_height // 2, kernel_width // 2
@@ -24,7 +26,7 @@ class EdgeDetection:
                 # extract a region of the size of the kernel
                 region = padded_image[i:i + kernel_height, j:j + kernel_width]
                 # return a pixel value that the summation of the mernel values multiplied by the region values
-                output[i, j] = np.sum(region * kernel)
+                output[i, j] = np.sum(region * flipped_kernel)
 
         # return the convolved output
         return output
